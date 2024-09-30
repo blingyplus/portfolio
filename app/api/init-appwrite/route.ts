@@ -1,3 +1,4 @@
+//app/api/init-appwrite/route.ts
 import { NextResponse } from 'next/server';
 import { databases } from '../../lib/appwrite';
 

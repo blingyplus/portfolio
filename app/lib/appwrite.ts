@@ -1,3 +1,4 @@
+//app/lib/appwrite.ts
 import { Client, Account, Databases, ID } from 'appwrite';
 
 const client = new Client();
