@@ -1,4 +1,5 @@
 // app/contexts/AuthContext.tsx
+"use client";
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getCurrentUser, login, logout } from '../lib/appwrite';
 import type { Models } from 'appwrite';
