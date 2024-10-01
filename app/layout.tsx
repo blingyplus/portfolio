@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <header className="bg-background border-b">
                 <nav className="container mx-auto px-4 py-3 flex justify-between items-center">
                   <Link href="/" className="text-2xl font-bold">
-                    My Portfolio
+                    blingyplus.
                   </Link>
                   <div className="flex items-center space-x-4">
                     <Link href="/about" className="text-foreground hover:underline">
@@ -33,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </header>
               <main className="flex-grow container mx-auto px-4 py-8">{children}</main>
               <footer className="bg-background border-t">
-                <div className="container mx-auto px-4 py-3 text-center">© {new Date().getFullYear()} My Portfolio. All rights reserved.</div>
+                <div className="container mx-auto px-4 py-3 text-center">© {new Date().getFullYear()} blingyplus. All rights reserved.</div>
               </footer>
             </div>
           </AuthProvider>
@@ -44,6 +44,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 
 export const metadata = {
-  title: "My Portfolio",
+  title: "blingyplus.",
   description: "Welcome to my personal portfolio website",
 };
