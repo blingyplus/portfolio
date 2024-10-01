@@ -4,37 +4,54 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { projectsCollection, blogPostsCollection } from "./lib/appwrite";
 import TechStackCarousel from "./components/TechStackCarousel";
+import AppwriteImage from "./components/AppwriteImage";
+import Loading from "./components/loading";
+import ErrorMessage from "./components/error";
 
 interface Project {
   $id: string;
   title: string;
   description: string;
+  imageUrl: string;
 }
 
 interface BlogPost {
   $id: string;
   title: string;
   slug: string;
+  content: string;
 }
-
 export default function HomePage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const projectsData = await projectsCollection.getAll();
-      setProjects(projectsData.slice(0, 3) as unknown as Project[]);
+      try {
+        const [projectsData, blogPostsData] = await Promise.all([projectsCollection.getAll(), blogPostsCollection.getAll()]);
 
-      const blogPostsData = await blogPostsCollection.getAll();
-      setBlogPosts(blogPostsData.slice(0, 3) as unknown as BlogPost[]);
+        setProjects(projectsData.slice(0, 3) as unknown as Project[]);
+        setBlogPosts(blogPostsData.slice(0, 3) as unknown as BlogPost[]);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError("Failed to load data. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
     };
+
     fetchData();
   }, []);
+
+  if (loading) return <Loading />;
+  if (error) return <ErrorMessage message={error} />;
 
   return (
     <div className="space-y-8 sm:space-y-14 px-2 sm:px-4 lg:px-8">
@@ -63,12 +80,16 @@ export default function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, index) => (
             <motion.div key={project.$id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 * index, duration: 0.5 }}>
-              <Card>
+              <Card className="overflow-hidden">
+                <AppwriteImage src={project.imageUrl} alt={project.title} className="w-full h-48 object-cover" />
                 <CardHeader>
                   <CardTitle>{project.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground">{project.description}</p>
+                  <p className="text-muted-foreground line-clamp-2">{project.description}</p>
+                  <Button asChild className="mt-4">
+                    <Link href={`/projects/${project.$id}`}>View Project</Link>
+                  </Button>
                 </CardContent>
               </Card>
             </motion.div>
@@ -91,9 +112,10 @@ export default function HomePage() {
                   <CardTitle>{post.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <Link href={`/blog/${post.slug}`} className="text-primary hover:underline">
-                    Read More
-                  </Link>
+                  <p className="text-muted-foreground line-clamp-3">{post.content}</p>
+                  <Button asChild className="mt-4">
+                    <Link href={`/blog/${post.slug}`}>Read More</Link>
+                  </Button>
                 </CardContent>
               </Card>
             </motion.div>

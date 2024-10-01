@@ -1,5 +1,5 @@
 //app/lib/appwrite.ts
-import { Client, Account, Databases, ID } from "appwrite";
+import { Client, Account, Databases, Storage, ID } from "appwrite";
 
 const client = new Client();
 
@@ -7,8 +7,10 @@ client.setEndpoint("https://cloud.appwrite.io/v1").setProject(process.env.NEXT_P
 
 export const account = new Account(client);
 export const databases = new Databases(client);
+export const storage = new Storage(client);
 
 const databaseId = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
+const bucketId = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID!;
 
 export { client };
 
@@ -29,9 +31,26 @@ export async function deleteDocument(collectionId: string, documentId: string) {
   await databases.deleteDocument(databaseId, collectionId, documentId);
 }
 
+export async function uploadImage(file: File) {
+  const uploadedFile = await storage.createFile(bucketId, ID.unique(), file);
+  return storage.getFileView(bucketId, uploadedFile.$id);
+}
+
 export const projectsCollection = {
-  create: (data: Record<string, unknown>) => createOrUpdateDocument("Projects", null, data),
-  update: (id: string, data: Record<string, unknown>) => createOrUpdateDocument("Projects", id, data),
+  create: async (data: Record<string, unknown>, imageFile?: File) => {
+    if (imageFile) {
+      const imageUrl = await uploadImage(imageFile);
+      data.imageUrl = imageUrl.href;
+    }
+    return createOrUpdateDocument("Projects", null, data);
+  },
+  update: async (id: string, data: Record<string, unknown>, imageFile?: File) => {
+    if (imageFile) {
+      const imageUrl = await uploadImage(imageFile);
+      data.imageUrl = imageUrl.href;
+    }
+    return createOrUpdateDocument("Projects", id, data);
+  },
   getAll: () => getDocuments("Projects"),
   delete: (id: string) => deleteDocument("Projects", id),
 };
