@@ -1,18 +1,18 @@
 // middleware.ts
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { getCurrentUser } from './lib/appwrite';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { isAuthenticated } from "./lib/appwrite";
 
 export async function middleware(request: NextRequest) {
-  const user = await getCurrentUser();
+  const isAuth = await isAuthenticated();
 
-  if (!user && request.nextUrl.pathname.startsWith('/admin')) {
-    return NextResponse.redirect(new URL('/login', request.url));
+  if (!isAuth && request.nextUrl.pathname.startsWith("/admin")) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: '/admin/:path*',
+  matcher: "/admin/:path*",
 };

@@ -2,12 +2,13 @@
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    "module": "ESNext",
+    "target": "ESNext",
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
+    "skipLibCheck": true,  
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -21,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "syncModels.ts", "syncModels.mjs"],
   "exclude": ["node_modules"]
 }

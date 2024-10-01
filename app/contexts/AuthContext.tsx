@@ -1,13 +1,14 @@
 // app/contexts/AuthContext.tsx
 "use client";
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getCurrentUser, login, logout } from '../lib/appwrite';
+import { getCurrentUser, login, logout, isAuthenticated } from '../lib/appwrite';
 import type { Models } from 'appwrite';
 
 interface AuthContextType {
   user: Models.User<Models.Preferences> | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  checkAuth: () => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -15,18 +16,18 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
 
-  useEffect(() => {
-    const checkUser = async () => {
+  const checkAuth = async () => {
+    const isAuth = await isAuthenticated();
+    if (isAuth && !user) {
       const currentUser = await getCurrentUser();
       setUser(currentUser);
-    };
-    checkUser();
-  }, []);
+    }
+    return isAuth;
+  };
 
   const handleLogin = async (email: string, password: string) => {
     await login(email, password);
-    const currentUser = await getCurrentUser();
-    setUser(currentUser);
+    await checkAuth();
   };
 
   const handleLogout = async () => {
@@ -35,7 +36,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, login: handleLogin, logout: handleLogout }}>
+    <AuthContext.Provider value={{ user, login: handleLogin, logout: handleLogout, checkAuth }}>
       {children}
     </AuthContext.Provider>
   );
