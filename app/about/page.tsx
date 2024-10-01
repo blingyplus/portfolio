@@ -1,9 +1,12 @@
 // app/about/page.tsx
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { aboutCollection } from '../lib/appwrite';
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { useState, useEffect } from "react";
+import { aboutCollection } from "../lib/appwrite";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import Loading from "../components/loading";
+import ErrorMessage from "../components/error";
 
 interface AboutData {
   content: string;
@@ -12,16 +15,28 @@ interface AboutData {
 
 export default function AboutPage() {
   const [aboutData, setAboutData] = useState<AboutData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchAboutData = async () => {
-      const data = await aboutCollection.get();
-      setAboutData(data as unknown as AboutData);
+      try {
+        setLoading(true);
+        const data = await aboutCollection.get();
+        setAboutData(data as unknown as AboutData);
+        setError(null);
+      } catch (err) {
+        setError("Failed to fetch about data. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
     };
     fetchAboutData();
   }, []);
 
-  if (!aboutData) return <div>Loading...</div>;
+  if (loading) return <Loading />;
+  if (error) return <ErrorMessage message={error} />;
+  if (!aboutData) return <ErrorMessage message="No data available." />;
 
   return (
     <div className="space-y-6">
@@ -31,7 +46,7 @@ export default function AboutPage() {
           <CardTitle>Biography</CardTitle>
         </CardHeader>
         <CardContent>
-          <p>{aboutData.content}</p>
+          <p className="whitespace-pre-wrap">{aboutData.content}</p>
         </CardContent>
       </Card>
       <Card>
@@ -39,11 +54,13 @@ export default function AboutPage() {
           <CardTitle>Skills</CardTitle>
         </CardHeader>
         <CardContent>
-          <ul className="list-disc list-inside">
+          <div className="flex flex-wrap gap-2">
             {aboutData.skills.map((skill, index) => (
-              <li key={index}>{skill}</li>
+              <Badge key={index} variant="secondary">
+                {skill}
+              </Badge>
             ))}
-          </ul>
+          </div>
         </CardContent>
       </Card>
     </div>

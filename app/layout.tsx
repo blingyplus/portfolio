@@ -13,11 +13,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AuthProvider>
             <div className="flex flex-col min-h-screen">
               <header className="bg-background border-b">
-                <nav className="container mx-auto px-4 py-3 flex justify-between items-center">
-                  <Link href="/" className="text-2xl font-bold">
+                <nav className="container mx-auto px-2 py-3 flex justify-between items-center">
+                  <Link href="/" className="lg:text-2xl font-bold sm:text-xl">
                     blingyplus.
                   </Link>
-                  <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-3 ml-auto">
                     <Link href="/about" className="text-foreground hover:underline">
                       About
                     </Link>
