@@ -3,13 +3,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { ThemeProvider } from "./components/theme-provider";
 import { ThemeToggle } from "./components/theme-toggle";
 import Link from "next/link";
-import type { Metadata } from "next";
 import "./globals.css";
-
-export const metadata: Metadata = {
-  title: "Russel D Boakye",
-  description: "Welcome to the personal portfolio of Russel Dankwa Boakye, a passionate software engineer and part-time graphic designer. Explore my projects, skills, and professional journey.",
-};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -39,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </header>
               <main className="flex-grow container mx-auto px-4 py-8">{children}</main>
               <footer className="bg-background border-t">
-                <div className="container mx-auto px-4 py-3 text-center">© 2023 My Portfolio. All rights reserved.</div>
+                <div className="container mx-auto px-4 py-3 text-center">© {new Date().getFullYear()} My Portfolio. All rights reserved.</div>
               </footer>
             </div>
           </AuthProvider>
@@ -48,3 +42,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+
+export const metadata = {
+  title: "My Portfolio",
+  description: "Welcome to my personal portfolio website",
+};

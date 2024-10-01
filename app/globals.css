@@ -1,3 +1,6 @@
+/* app/globals.css */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -30,7 +33,7 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
   }
-
+ 
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -58,12 +61,12 @@
     --chart-5: 340 75% 55%;
   }
 }
-
+ 
 @layer base {
   * {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
   }
 }
