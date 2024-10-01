@@ -26,6 +26,7 @@ export default function AdminProjects() {
     projectUrl: "",
     technologies: [],
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   useEffect(() => {
     fetchProjects();
@@ -46,9 +47,15 @@ export default function AdminProjects() {
     setNewProject((prev) => ({ ...prev, technologies }));
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await projectsCollection.create(newProject);
+    await projectsCollection.create(newProject, imageFile || undefined);
     setNewProject({
       title: "",
       description: "",
@@ -56,6 +63,7 @@ export default function AdminProjects() {
       projectUrl: "",
       technologies: [],
     });
+    setImageFile(null);
     fetchProjects();
   };
 
@@ -75,7 +83,7 @@ export default function AdminProjects() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input name="title" placeholder="Project Title" value={newProject.title} onChange={handleInputChange} required />
             <Textarea name="description" placeholder="Project Description" value={newProject.description} onChange={handleInputChange} required />
-            <Input name="imageUrl" placeholder="Image URL" value={newProject.imageUrl} onChange={handleInputChange} />
+            <Input type="file" accept="image/*" onChange={handleImageChange} />
             <Input name="projectUrl" placeholder="Project URL" value={newProject.projectUrl} onChange={handleInputChange} />
             <Input name="technologies" placeholder="Technologies (comma-separated)" value={newProject.technologies.join(", ")} onChange={handleTechnologiesChange} />
             <Button type="submit">Add Project</Button>
@@ -90,6 +98,7 @@ export default function AdminProjects() {
             </CardHeader>
             <CardContent>
               <p>{project.description}</p>
+              {project.imageUrl && <img src={project.imageUrl} alt={project.title} className="mt-2 max-w-full h-auto" />}
               <p>Technologies: {project.technologies.join(", ")}</p>
               <Button variant="destructive" onClick={() => handleDelete(project.$id)} className="mt-4">
                 Delete
