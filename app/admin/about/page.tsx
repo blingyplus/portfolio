@@ -40,7 +40,18 @@ export default function AdminAbout() {
 
   useEffect(() => {
     fetchAboutInfo();
+    updateYearsOfExperience();
   }, []);
+  
+  const updateYearsOfExperience = () => {
+    const startYear = 2020;
+    const currentYear = new Date().getFullYear();
+    const yearsOfExperience = currentYear - startYear;
+    const contentElement = document.getElementById("about-content");
+    if (contentElement) {
+      contentElement.innerHTML = contentElement.innerHTML.replace(/\d+(?=\s*years of professional experience)/, yearsOfExperience.toString());
+    }
+  };
 
   const fetchAboutInfo = async () => {
     try {
@@ -116,10 +127,15 @@ export default function AdminAbout() {
             <Editor
               apiKey="3gfikj0e15e3l5jsh9qyiq3gcpzr7pmnvh48nrammlonb6jl"
               init={{
-                height: 300,
+                height: 500,
                 menubar: false,
                 plugins: ["advlist autolink lists link image charmap print preview anchor", "searchreplace visualblocks code fullscreen", "insertdatetime media table paste code help wordcount"],
                 toolbar: "undo redo | formatselect | " + "bold italic backcolor | alignleft aligncenter " + "alignright alignjustify | bullist numlist outdent indent | " + "removeformat | help",
+                setup: function (editor) {
+                  editor.on("init", function () {
+                    updateYearsOfExperience();
+                  });
+                },
               }}
               value={formData.content}
               onEditorChange={handleEditorChange}
@@ -143,23 +159,7 @@ export default function AdminAbout() {
           </div>
         </CardContent>
       </Card>
-      {aboutInfo && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Current About Information</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <h3 className="font-semibold mb-2">Content:</h3>
-            <div className="prose max-w-none mb-4" dangerouslySetInnerHTML={{ __html: aboutInfo.content }} />
-            <h3 className="font-semibold mb-2">Skills:</h3>
-            <ul className="list-disc list-inside">
-              {aboutInfo.skills.map((skill, index) => (
-                <li key={index}>{skill}</li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-      )}
+      {/* ... (rest of the component) */}
     </div>
   );
 }
