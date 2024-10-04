@@ -2,12 +2,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from 'next/link';
 import { projectsCollection } from "../lib/appwrite";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Loading from "../components/loading";
 import ErrorMessage from "../components/error";
+import AppwriteImage from "../components/AppwriteImage";
 
 interface Project {
   $id: string;
@@ -53,22 +55,34 @@ export default function ProjectsPage() {
       <h1 className="text-3xl font-bold">My Projects</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {paginatedProjects.map((project) => (
-          <Card key={project.$id}>
+          <Card key={project.$id} className="flex flex-col">
+            <AppwriteImage
+              src={project.imageUrl}
+              alt={project.title}
+              className="w-full h-48 object-cover"
+            />
             <CardHeader>
               <CardTitle>{project.title}</CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="mb-4">{project.description}</p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {project.technologies.map((tech, index) => (
-                  <Badge key={index} variant="secondary">
-                    {tech}
-                  </Badge>
-                ))}
+            <CardContent className="flex-grow flex flex-col justify-between">
+              <div>
+                <p className="mb-4 line-clamp-3">{project.description}</p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.technologies.map((tech, index) => (
+                    <Badge key={index} variant="secondary">
+                      {tech}
+                    </Badge>
+                  ))}
+                </div>
               </div>
-              <a href={project.projectUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                View Project
-              </a>
+              <div className="flex justify-between items-center mt-4">
+                <Link href={`/projects/${project.$id}`} passHref>
+                  <Button variant="outline">View Details</Button>
+                </Link>
+                <a href={project.projectUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                  Live Project
+                </a>
+              </div>
             </CardContent>
           </Card>
         ))}
