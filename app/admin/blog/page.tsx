@@ -143,7 +143,7 @@ export default function AdminBlogPosts() {
             <Editor
               apiKey="3gfikj0e15e3l5jsh9qyiq3gcpzr7pmnvh48nrammlonb6jl" // Your actual API key
               init={{
-                height: 500,
+                height: 400,
                 menubar: false,
                 plugins: ["advlist autolink lists link image charmap print preview anchor", "searchreplace visualblocks code fullscreen", "insertdatetime media table paste code help wordcount"],
                 toolbar: "undo redo | formatselect | " + "bold italic backcolor | alignleft aligncenter " + "alignright alignjustify | bullist numlist outdent indent | " + "removeformat | help",
