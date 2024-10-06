@@ -1,8 +1,7 @@
-//app/lib/appwrite.ts
+// app/lib/appwrite.ts
 import { Client, Account, Databases, Storage, ID } from "appwrite";
 
 const client = new Client();
-
 client.setEndpoint("https://cloud.appwrite.io/v1").setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!);
 
 export const account = new Account(client);
@@ -93,7 +92,6 @@ export async function logout() {
   return await account.deleteSession("current");
 }
 
-// New function to check if user is authenticated
 export async function isAuthenticated() {
   try {
     await account.get();

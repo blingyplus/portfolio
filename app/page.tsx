@@ -12,6 +12,7 @@ import TechStackCarousel from "./components/TechStackCarousel";
 import AppwriteImage from "./components/AppwriteImage";
 import Loading from "./components/loading";
 import ErrorMessage from "./components/error";
+import { Badge } from "@/components/ui/badge";
 
 interface Project {
   $id: string;
@@ -23,8 +24,11 @@ interface Project {
 interface BlogPost {
   $id: string;
   title: string;
-  slug: string;
   content: string;
+  slug: string;
+  publishDate?: string;
+  tags?: string[];
+  imageUrl?: string;
 }
 export default function HomePage() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -107,15 +111,34 @@ export default function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {blogPosts.map((post, index) => (
             <motion.div key={post.$id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 * index, duration: 0.5 }}>
-              <Card>
+              <Card className="flex flex-col h-full">
+                {post.imageUrl && <AppwriteImage src={post.imageUrl} alt={post.title} className="w-full h-48 object-cover" />}
                 <CardHeader>
-                  <CardTitle>{post.title}</CardTitle>
+                  <CardTitle className="line-clamp-2">
+                    <Link href={`/blog/${post.slug}`} className="hover:underline">
+                      {post.title}
+                    </Link>
+                  </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground line-clamp-3">{post.content}</p>
-                  <Button asChild className="mt-4">
-                    <Link href={`/blog/${post.slug}`}>Read More</Link>
-                  </Button>
+                <CardContent className="flex-grow flex flex-col justify-between">
+                  <div>
+                    <p className="text-muted-foreground line-clamp-3 mb-4">{post.content}</p>
+                    {post.tags && (
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {post.tags.slice(0, 3).map((tag, tagIndex) => (
+                          <Badge key={tagIndex} variant="secondary">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex justify-between items-center mt-4">
+                    <Button asChild variant="outline">
+                      <Link href={`/blog/${post.slug}`}>Read More</Link>
+                    </Button>
+                    {post.publishDate && <span className="text-sm text-muted-foreground">{new Date(post.publishDate).toLocaleDateString()}</span>}
+                  </div>
                 </CardContent>
               </Card>
             </motion.div>
