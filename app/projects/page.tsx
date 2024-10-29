@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from 'next/link';
+import Link from "next/link";
 import { projectsCollection } from "../lib/appwrite";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -21,6 +21,13 @@ interface Project {
 }
 
 const ITEMS_PER_PAGE = 6;
+
+// Utility function to strip HTML tags
+const stripHtmlTags = (html: string): string => {
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = html;
+  return tempDiv.innerText || tempDiv.textContent || "";
+};
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -56,17 +63,13 @@ export default function ProjectsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {paginatedProjects.map((project) => (
           <Card key={project.$id} className="flex flex-col">
-            <AppwriteImage
-              src={project.imageUrl}
-              alt={project.title}
-              className="w-full h-48 object-cover"
-            />
+            <AppwriteImage src={project.imageUrl} alt={project.title} className="w-full h-48 object-cover" />
             <CardHeader>
               <CardTitle>{project.title}</CardTitle>
             </CardHeader>
             <CardContent className="flex-grow flex flex-col justify-between">
               <div>
-                <p className="mb-4 line-clamp-3">{project.description}</p>
+                <p className="mb-4 line-clamp-3">{stripHtmlTags(project.description)}</p>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {project.technologies.map((tech, index) => (
                     <Badge key={index} variant="secondary">

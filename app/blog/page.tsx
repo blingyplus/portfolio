@@ -21,6 +21,13 @@ interface BlogPost {
   imageUrl?: string;
 }
 
+// Utility function to strip HTML tags
+const stripHtmlTags = (html: string): string => {
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = html;
+  return tempDiv.innerText || tempDiv.textContent || "";
+};
+
 export default function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -61,7 +68,7 @@ export default function BlogPage() {
             </CardHeader>
             <CardContent className="flex-grow flex flex-col justify-between">
               <div>
-                <p className="mb-4 line-clamp-3">{post.content}</p>
+                <p className="mb-4 line-clamp-3">{stripHtmlTags(post.content)}</p>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {post.tags.map((tag, index) => (
                     <Badge key={index} variant="secondary">
