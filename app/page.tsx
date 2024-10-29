@@ -54,6 +54,12 @@ export default function HomePage() {
     fetchData();
   }, []);
 
+  const stripHtmlTags = (html: any) => {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    return tempDiv.innerText || tempDiv.textContent || "";
+  };
+
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
 
@@ -90,7 +96,7 @@ export default function HomePage() {
                   <CardTitle>{project.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground line-clamp-2">{project.description}</p>
+                  <p className="text-muted-foreground line-clamp-2">{stripHtmlTags(project.description)}</p>
                   <Button asChild className="mt-4">
                     <Link href={`/projects/${project.$id}`}>View Project</Link>
                   </Button>
@@ -122,7 +128,7 @@ export default function HomePage() {
                 </CardHeader>
                 <CardContent className="flex-grow flex flex-col justify-between">
                   <div>
-                    <p className="text-muted-foreground line-clamp-3 mb-4">{post.content}</p>
+                    <p className="text-muted-foreground line-clamp-3 mb-4">{stripHtmlTags(post.content)}</p>
                     {post.tags && (
                       <div className="flex flex-wrap gap-2 mb-4">
                         {post.tags.slice(0, 3).map((tag, tagIndex) => (
