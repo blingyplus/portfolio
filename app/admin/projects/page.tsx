@@ -72,8 +72,15 @@ export default function AdminProjects() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editingProject) {
-      const { $id, ...updateData } = editingProject;
-      await projectsCollection.update($id, updateData, imageFile || undefined);
+      const { $id, title, description, imageUrl, projectUrl, technologies } = editingProject;
+      const dataToUpdate = {
+        title,
+        description,
+        imageUrl,
+        projectUrl,
+        technologies,
+      };
+      await projectsCollection.update($id, dataToUpdate, imageFile || undefined);
       setEditingProject(null);
     } else {
       await projectsCollection.create(newProject, imageFile || undefined);
