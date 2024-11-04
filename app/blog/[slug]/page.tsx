@@ -54,6 +54,12 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   if (error) return <ErrorMessage message={error} />;
   if (!post) return <ErrorMessage message="Blog post not found." />;
 
+  const stripHtmlTags = (html: string): string => {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    return tempDiv.innerText || tempDiv.textContent || "";
+  };
+
   return (
     <div className="max-w-3xl mx-auto space-y-8">
       <article className="bg-card rounded-lg shadow-md overflow-hidden">
@@ -84,7 +90,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                   <CardTitle className="line-clamp-2">{relatedPost.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="line-clamp-3 text-muted-foreground">{relatedPost.content.substring(0, 100)}...</p>
+                  <p className="line-clamp-3 text-muted-foreground">{stripHtmlTags(relatedPost.content.substring(0, 100))}...</p>
                 </CardContent>
               </Link>
             </Card>
