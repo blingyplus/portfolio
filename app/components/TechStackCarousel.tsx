@@ -29,14 +29,14 @@ const techStacks = [
 const TechStackCarousel: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const controls = useAnimation();
-  const itemWidth = 160; // Width of each carousel item
+  const [isDragging, setIsDragging] = useState(false);
+  const itemWidth = 120; // Adjusted item width for better responsiveness
 
-  // Auto-scroll functionality
   const startAutoScroll = () => {
     controls.start({
       x: [0, -itemWidth * techStacks.length],
       transition: {
-        x: { repeat: Infinity, repeatType: "loop", duration: techStacks.length * 2, ease: "linear" },
+        x: { repeat: Infinity, repeatType: "loop", duration: techStacks.length * 3, ease: "linear" },
       },
     });
   };
@@ -46,33 +46,63 @@ const TechStackCarousel: React.FC = () => {
   }, []);
 
   const handleDragStart = () => {
-    controls.stop(); // Stop auto-scroll when dragging starts
+    controls.stop();
+    setIsDragging(true);
   };
 
   const handleDragEnd = () => {
-    startAutoScroll(); // Restart auto-scroll when dragging ends
+    setIsDragging(false);
+    setTimeout(startAutoScroll, 1500); // Resume auto-scroll after a delay
+  };
+
+  const scrollLeft = () => {
+    controls.start({
+      x: "+=300",
+      transition: {
+        duration: 0.5,
+      },
+    });
+  };
+
+  const scrollRight = () => {
+    controls.start({
+      x: "-=300",
+      transition: {
+        duration: 0.5,
+      },
+    });
   };
 
   return (
     <div className="relative overflow-hidden py-4 w-full" ref={containerRef}>
+      {/* Left Arrow */}
+      <button onClick={scrollLeft} className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-200 dark:bg-gray-700 p-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600">
+        <ChevronLeft size={24} />
+      </button>
+
       <motion.div
-        className="flex space-x-16"
+        className="flex space-x-12 md:space-x-16 px-4"
         drag="x"
         dragConstraints={containerRef}
         dragElastic={0.1}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         animate={controls}
-        style={{ cursor: "grab" }}
+        style={{ cursor: isDragging ? "grabbing" : "grab" }}
       >
         {/* Infinite loop by duplicating techStacks array */}
         {[...techStacks, ...techStacks].map((tech, index) => (
           <div key={index} className="flex flex-col items-center">
-            <img src={tech.icon} alt={tech.name} className="w-16 h-16 dark:invert" />
+            <img src={tech.icon} alt={tech.name} className="w-16 h-16 md:w-20 md:h-20 dark:invert" />
             <span className="mt-2 text-sm">{tech.name}</span>
           </div>
         ))}
       </motion.div>
+
+      {/* Right Arrow */}
+      <button onClick={scrollRight} className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 dark:bg-gray-700 p-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600">
+        <ChevronRight size={24} />
+      </button>
     </div>
   );
 };
