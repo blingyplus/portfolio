@@ -68,7 +68,7 @@ export default function ProjectDetails() {
         </CardHeader>
         <CardContent className="space-y-4">
           <AppwriteImage src={project.imageUrl} alt={project.title} className="w-full h-auto object-cover rounded-lg" width={800} height={400} />
-          <p className="text-lg">{project.description}</p>
+          <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: project.description }} />
           <div>
             <h3 className="text-xl font-semibold mb-2">Technologies Used:</h3>
             <div className="flex flex-wrap gap-2">

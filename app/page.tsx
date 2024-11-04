@@ -13,6 +13,9 @@ import AppwriteImage from "./components/AppwriteImage";
 import Loading from "./components/loading";
 import ErrorMessage from "./components/error";
 import { Badge } from "@/components/ui/badge";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 interface Project {
   $id: string;
@@ -74,6 +77,16 @@ export default function HomePage() {
             <div className="max-w-md mx-auto lg:mx-0">
               <h1 className="text-3xl sm:text-4xl font-bold mb-4">Russel Dankwa Boakye</h1>
               <p className="text-lg sm:text-xl text-muted-foreground mb-6">Full-Stack Software Developer. | Crafting innovative digital solutions with code and creativity</p>
+              <div className="flex items-center justify-center lg:justify-start gap-4 mb-6">
+                {/* GitHub Icon */}
+                <a href="https://github.com/blingyplus" target="_blank" rel="noopener noreferrer">
+                  <FontAwesomeIcon icon={faGithub} className="text-2xl text-muted-foreground hover:text-primary transition-colors" />
+                </a>
+                {/* Email Icon */}
+                <a href="mailto:russelboakye@gmail.com" target="_blank" rel="noopener noreferrer">
+                  <FontAwesomeIcon icon={faEnvelope} className="text-2xl text-muted-foreground hover:text-primary transition-colors" />
+                </a>
+              </div>
               <Button asChild>
                 <Link href="/about">Learn More About Me</Link>
               </Button>
