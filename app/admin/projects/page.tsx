@@ -41,7 +41,7 @@ export default function AdminProjects() {
   const fetchProjects = async () => {
     try {
       const data = await projectsCollection.getAll();
-      setProjects(data as Project[]);
+      setProjects(data as unknown as Project[]);
     } catch (error: any) {
       console.error("Error fetching projects:", error);
       toast({
