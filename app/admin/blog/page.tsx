@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { blogPostsCollection } from "../../lib/appwrite";
+import { TINYMCE_API_KEY, TINYMCE_CONFIG } from "../../lib/tinymce";
 
 interface BlogPost {
   $id: string;
@@ -140,17 +141,7 @@ export default function AdminBlogPosts() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input name="title" placeholder="Post Title" value={editingPost ? editingPost.title : newPost.title} onChange={handleInputChange} required />
             <Input name="slug" placeholder="Slug" value={editingPost ? editingPost.slug : newPost.slug} onChange={handleInputChange} required />
-            <Editor
-              apiKey="3gfikj0e15e3l5jsh9qyiq3gcpzr7pmnvh48nrammlonb6jl" // Your actual API key
-              init={{
-                height: 400,
-                menubar: false,
-                plugins: ["advlist autolink lists link image charmap print preview anchor", "searchreplace visualblocks code fullscreen", "insertdatetime media table paste code help wordcount"],
-                toolbar: "undo redo | formatselect | " + "bold italic backcolor | alignleft aligncenter " + "alignright alignjustify | bullist numlist outdent indent | " + "removeformat | help",
-              }}
-              value={editingPost ? editingPost.content : newPost.content}
-              onEditorChange={handleEditorChange}
-            />
+            <Editor apiKey={TINYMCE_API_KEY} init={TINYMCE_CONFIG} value={editingPost ? editingPost.content : newPost.content} onEditorChange={handleEditorChange} />
             <Input type="date" name="publishDate" value={editingPost ? editingPost.publishDate : newPost.publishDate} onChange={handleInputChange} required />
             <Input name="tags" placeholder="Tags (comma-separated)" value={editingPost ? editingPost.tags.join(", ") : newPost.tags.join(", ")} onChange={handleTagsChange} />
             <div className="flex space-x-2">
@@ -164,7 +155,7 @@ export default function AdminBlogPosts() {
           </form>
         </CardContent>
       </Card>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {posts.map((post) => (
           <Card key={post.$id}>
             <CardHeader>
