@@ -9,9 +9,11 @@ import Link from "next/link";
 import Loading from "../../components/loading";
 import ErrorMessage from "../../components/error";
 import AppwriteImage from "../../components/AppwriteImage";
+import { formatDate } from "@/app/lib/utils";
 
 interface BlogPost {
   $id: string;
+  $createdAt: string;
   title: string;
   content: string;
   slug: string;
@@ -61,13 +63,13 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   };
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8">
+    <div className="space-y-8 sm:space-y-14 px-2 sm:px-4 lg:px-8">
       <article className="bg-card rounded-lg shadow-md overflow-hidden">
         {post.imageUrl && <AppwriteImage src={post.imageUrl} alt={post.title} className="w-full h-64 object-cover" />}
         <div className="p-6 space-y-4">
           <h1 className="text-3xl font-bold text-center">{post.title}</h1>
           <div className="flex justify-center items-center space-x-4">
-            <span className="text-sm text-muted-foreground">{new Date(post.publishDate).toLocaleDateString()}</span>
+            <span className="text-sm text-muted-foreground">{formatDate(post.$createdAt)}</span>
             <div className="flex flex-wrap gap-2 justify-center">
               {post.tags.map((tag, index) => (
                 <Badge key={index} variant="secondary">

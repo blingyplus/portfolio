@@ -26,12 +26,30 @@ export default function AboutPage() {
   useEffect(() => {
     const fetchAboutData = async () => {
       try {
+        // Check if data exists in localStorage
+        const cachedData = localStorage.getItem("aboutData");
+        const cachedTimestamp = localStorage.getItem("aboutDataTimestamp");
+        const now = new Date().getTime();
+
+        // Use cached data if it exists and is less than 24 hours old
+        if (cachedData && cachedTimestamp && now - parseInt(cachedTimestamp) < 24 * 60 * 60 * 1000) {
+          setAboutData(JSON.parse(cachedData));
+          setLoading(false);
+          return;
+        }
+
         setLoading(true);
         const data = await aboutCollection.get();
-        setAboutData({
+        const processedData = {
           ...(data as unknown as AboutData),
           content: decodeHTMLEntities(data.content),
-        });
+        };
+
+        // Cache the data and timestamp
+        localStorage.setItem("aboutData", JSON.stringify(processedData));
+        localStorage.setItem("aboutDataTimestamp", now.toString());
+
+        setAboutData(processedData);
         setError(null);
       } catch (err) {
         setError("Failed to fetch about data. Please try again later.");
