@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect } from "react";
 import { motion, useAnimation } from "framer-motion";
+import Image from "next/image";
 
 const techStacks = [
   { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
@@ -51,7 +52,9 @@ const TechStackCarousel: React.FC = () => {
         {/* Quadruple the techStacks array for smoother infinite scroll */}
         {[...techStacks, ...techStacks, ...techStacks, ...techStacks].map((tech, index) => (
           <div key={index} className="flex flex-col items-center">
-            <img src={tech.icon} alt={tech.name} className="w-16 h-16 md:w-20 md:h-20 dark:invert" />
+            <div className="relative w-16 h-16 md:w-20 md:h-20">
+              <Image src={tech.icon} alt={tech.name} fill className="dark:invert" unoptimized />
+            </div>
             <span className="mt-2 text-sm font-medium">{tech.name}</span>
           </div>
         ))}
