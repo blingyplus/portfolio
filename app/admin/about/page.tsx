@@ -66,7 +66,7 @@ export default function AdminAbout() {
         });
       }
       setError(null);
-    } catch (err) {
+    } catch {
       setError("Failed to fetch about information. Please try again later.");
     } finally {
       setLoading(false);
@@ -102,7 +102,7 @@ export default function AdminAbout() {
         title: "Success",
         description: "About information updated successfully.",
       });
-    } catch (err) {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to update about information. Please try again.",

@@ -51,7 +51,7 @@ export default function AboutPage() {
 
         setAboutData(processedData);
         setError(null);
-      } catch (err) {
+      } catch {
         setError("Failed to fetch about data. Please try again later.");
       } finally {
         setLoading(false);

@@ -10,6 +10,7 @@ import { projectsCollection } from "../../lib/appwrite";
 import { TINYMCE_API_KEY, TINYMCE_CONFIG } from "../../lib/tinymce";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface Project {
   $id: string;
@@ -18,6 +19,13 @@ interface Project {
   imageUrl: string;
   projectUrl: string;
   technologies: string[];
+}
+
+interface AppwriteError {
+  message: string;
+  code: number;
+  type: string;
+  version: string;
 }
 
 export default function AdminProjects() {
@@ -42,11 +50,12 @@ export default function AdminProjects() {
     try {
       const data = await projectsCollection.getAll();
       setProjects(data as unknown as Project[]);
-    } catch (error: any) {
-      console.error("Error fetching projects:", error);
+    } catch (error) {
+      const appwriteError = error as AppwriteError;
+      console.error("Error fetching projects:", appwriteError);
       toast({
         title: "Error",
-        description: error?.message || "Failed to fetch projects",
+        description: appwriteError.message || "Failed to fetch projects",
         variant: "destructive",
       });
     } finally {
@@ -104,11 +113,12 @@ export default function AdminProjects() {
           title: "Success",
           description: "Project updated successfully",
         });
-      } catch (error: any) {
-        console.error("Error updating project:", error);
+      } catch (error) {
+        const appwriteError = error as AppwriteError;
+        console.error("Error updating project:", appwriteError);
         toast({
           title: "Error",
-          description: error?.message || "Failed to update project",
+          description: appwriteError.message || "Failed to update project",
           variant: "destructive",
         });
       }
@@ -126,11 +136,12 @@ export default function AdminProjects() {
           title: "Success",
           description: "Project added successfully",
         });
-      } catch (error: any) {
-        console.error("Error creating project:", error);
+      } catch (error) {
+        const appwriteError = error as AppwriteError;
+        console.error("Error creating project:", appwriteError);
         toast({
           title: "Error",
-          description: error?.message || "Failed to create project",
+          description: appwriteError.message || "Failed to create project",
           variant: "destructive",
         });
       }
@@ -146,11 +157,12 @@ export default function AdminProjects() {
         title: "Success",
         description: "Project deleted successfully",
       });
-    } catch (error: any) {
-      console.error("Error deleting project:", error);
+    } catch (error) {
+      const appwriteError = error as AppwriteError;
+      console.error("Error deleting project:", appwriteError);
       toast({
         title: "Error",
-        description: error?.message || "Failed to delete project",
+        description: appwriteError.message || "Failed to delete project",
         variant: "destructive",
       });
     }
@@ -210,7 +222,11 @@ export default function AdminProjects() {
             </CardHeader>
             <CardContent>
               <div dangerouslySetInnerHTML={{ __html: project.description.substring(0, 200) + "..." }} />
-              {project.imageUrl && <img src={project.imageUrl} alt={project.title} className="mt-2 max-w-full h-auto" />}
+              {project.imageUrl && (
+                <div className="relative mt-2 w-full h-48">
+                  <Image src={project.imageUrl} alt={project.title} fill className="object-cover rounded-md" />
+                </div>
+              )}
               <p>Technologies: {project.technologies.join(", ")}</p>
               <div className="flex space-x-2 mt-4">
                 <Button onClick={() => handleEdit(project)}>Edit</Button>

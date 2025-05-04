@@ -23,6 +23,13 @@ interface BlogPost {
   tags: string[];
 }
 
+interface AppwriteError {
+  message: string;
+  code: number;
+  type: string;
+  version: string;
+}
+
 export default function AdminBlogPosts() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
@@ -42,11 +49,12 @@ export default function AdminBlogPosts() {
     try {
       const fetchedPosts = await blogPostsCollection.getAll();
       setPosts(fetchedPosts as unknown as BlogPost[]);
-    } catch (error: any) {
-      console.error("Error fetching posts:", error);
+    } catch (error) {
+      const appwriteError = error as AppwriteError;
+      console.error("Error fetching posts:", appwriteError);
       toast({
         title: "Error",
-        description: error?.message || "Failed to fetch blog posts",
+        description: appwriteError.message || "Failed to fetch blog posts",
         variant: "destructive",
       });
     }
@@ -116,9 +124,10 @@ export default function AdminBlogPosts() {
         toast({ title: "Success", description: "Blog post created." });
         setNewPost({ title: "", content: "", slug: "", publishDate: new Date().toISOString().split("T")[0], tags: [] });
       }
-    } catch (error: any) {
-      console.error("Error saving post:", error);
-      toast({ title: "Error", description: error?.message || "Failed to save blog post", variant: "destructive" });
+    } catch (error) {
+      const appwriteError = error as AppwriteError;
+      console.error("Error saving post:", appwriteError);
+      toast({ title: "Error", description: appwriteError.message || "Failed to save blog post", variant: "destructive" });
     } finally {
       fetchPosts();
     }
@@ -128,9 +137,10 @@ export default function AdminBlogPosts() {
     try {
       await blogPostsCollection.delete(id);
       toast({ title: "Success", description: "Blog post deleted." });
-    } catch (error: any) {
-      console.error("Error deleting post:", error);
-      toast({ title: "Error", description: error?.message || "Failed to delete blog post", variant: "destructive" });
+    } catch (error) {
+      const appwriteError = error as AppwriteError;
+      console.error("Error deleting post:", appwriteError);
+      toast({ title: "Error", description: appwriteError.message || "Failed to delete blog post", variant: "destructive" });
     } finally {
       fetchPosts();
     }

@@ -43,7 +43,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         } else {
           setError("Blog post not found.");
         }
-      } catch (err) {
+      } catch {
         setError("Failed to fetch blog post. Please try again later.");
       } finally {
         setLoading(false);

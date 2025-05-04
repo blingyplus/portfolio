@@ -6,8 +6,6 @@ import Link from "next/link";
 import { blogPostsCollection } from "../lib/appwrite";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import Loading from "../components/loading";
 import ErrorMessage from "../components/error";
 import AppwriteImage from "../components/AppwriteImage";
 import { formatDate } from "@/app/lib/utils";
@@ -45,7 +43,7 @@ export default function BlogPage() {
         const sortedPosts = (data as unknown as BlogPost[]).sort((a, b) => new Date(b.$createdAt).getTime() - new Date(a.$createdAt).getTime());
         setPosts(sortedPosts);
         setError(null);
-      } catch (err) {
+      } catch {
         setError("Failed to fetch blog posts. Please try again later.");
       } finally {
         setLoading(false);
