@@ -10,9 +10,11 @@ import { Button } from "@/components/ui/button";
 import Loading from "../components/loading";
 import ErrorMessage from "../components/error";
 import AppwriteImage from "../components/AppwriteImage";
+import { SkeletonLoader } from "../components/skeleton-loader";
 
 interface Project {
   $id: string;
+  $createdAt: string;
   title: string;
   description: string;
   imageUrl: string;
@@ -40,7 +42,9 @@ export default function ProjectsPage() {
       try {
         setLoading(true);
         const data = await projectsCollection.getAll();
-        setProjects(data as unknown as Project[]);
+        // Sort projects by creation date (newest first)
+        const sortedProjects = (data as unknown as Project[]).sort((a, b) => new Date(b.$createdAt).getTime() - new Date(a.$createdAt).getTime());
+        setProjects(sortedProjects);
         setError(null);
       } catch (err) {
         setError("Failed to fetch projects. Please try again later.");
@@ -51,43 +55,41 @@ export default function ProjectsPage() {
     fetchProjects();
   }, []);
 
-  if (loading) return <Loading />;
+  if (loading) {
+    return (
+      <div className="space-y-8">
+        <h1 className="text-3xl font-bold text-center">Projects</h1>
+        <SkeletonLoader count={6} type="project" />
+      </div>
+    );
+  }
   if (error) return <ErrorMessage message={error} />;
 
   const totalPages = Math.ceil(projects.length / ITEMS_PER_PAGE);
   const paginatedProjects = projects.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 sm:space-y-14 px-2 sm:px-4 lg:px-8">
       <h1 className="text-3xl font-bold">My Projects</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {paginatedProjects.map((project) => (
-          <Card key={project.$id} className="flex flex-col">
-            <AppwriteImage src={project.imageUrl} alt={project.title} className="w-full h-48 object-cover" />
-            <CardHeader>
-              <CardTitle>{project.title}</CardTitle>
-            </CardHeader>
-            <CardContent className="flex-grow flex flex-col justify-between">
-              <div>
-                <p className="mb-4 line-clamp-3">{stripHtmlTags(project.description)}</p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.technologies.map((tech, index) => (
-                    <Badge key={index} variant="secondary">
-                      {tech}
-                    </Badge>
-                  ))}
+          <Link href={`/projects/${project.$id}`} key={project.$id} className="group">
+            <Card className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+              <AppwriteImage src={project.imageUrl} alt={project.title} className="w-full h-48 object-cover" />
+              <CardHeader>
+                <CardTitle className="group-hover:text-primary transition-colors">{project.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="line-clamp-3 text-muted-foreground">{stripHtmlTags(project.description)}</p>
+                <div className="flex justify-between items-center mt-4">
+                  <span className="text-sm text-muted-foreground">View Details</span>
+                  <a href={project.projectUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline" onClick={(e) => e.stopPropagation()}>
+                    Live Project
+                  </a>
                 </div>
-              </div>
-              <div className="flex justify-between items-center mt-4">
-                <Link href={`/projects/${project.$id}`} passHref>
-                  <Button variant="outline">View Details</Button>
-                </Link>
-                <a href={project.projectUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                  Live Project
-                </a>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
       {totalPages > 1 && (

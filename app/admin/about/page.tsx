@@ -21,6 +21,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { TINYMCE_API_KEY, TINYMCE_CONFIG } from "../../lib/tinymce";
 
 interface AboutInfo {
   $id: string;
@@ -42,7 +43,7 @@ export default function AdminAbout() {
     fetchAboutInfo();
     updateYearsOfExperience();
   }, []);
-  
+
   const updateYearsOfExperience = () => {
     const startYear = 2020;
     const currentYear = new Date().getFullYear();
@@ -65,7 +66,7 @@ export default function AdminAbout() {
         });
       }
       setError(null);
-    } catch (err) {
+    } catch {
       setError("Failed to fetch about information. Please try again later.");
     } finally {
       setLoading(false);
@@ -101,7 +102,7 @@ export default function AdminAbout() {
         title: "Success",
         description: "About information updated successfully.",
       });
-    } catch (err) {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to update about information. Please try again.",
@@ -125,12 +126,10 @@ export default function AdminAbout() {
         <CardContent>
           <div className="space-y-4">
             <Editor
-              apiKey="3gfikj0e15e3l5jsh9qyiq3gcpzr7pmnvh48nrammlonb6jl"
+              apiKey={TINYMCE_API_KEY}
               init={{
+                ...TINYMCE_CONFIG,
                 height: 500,
-                menubar: false,
-                plugins: ["advlist autolink lists link image charmap print preview anchor", "searchreplace visualblocks code fullscreen", "insertdatetime media table paste code help wordcount"],
-                toolbar: "undo redo | formatselect | " + "bold italic backcolor | alignleft aligncenter " + "alignright alignjustify | bullist numlist outdent indent | " + "removeformat | help",
                 setup: function (editor) {
                   editor.on("init", function () {
                     updateYearsOfExperience();

@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { blogPostsCollection } from "../../lib/appwrite";
+import { TINYMCE_API_KEY, TINYMCE_CONFIG } from "../../lib/tinymce";
+import { toast } from "@/components/ui/use-toast";
 
 interface BlogPost {
   $id: string;
@@ -19,6 +21,13 @@ interface BlogPost {
   slug: string;
   publishDate: string;
   tags: string[];
+}
+
+interface AppwriteError {
+  message: string;
+  code: number;
+  type: string;
+  version: string;
 }
 
 export default function AdminBlogPosts() {
@@ -37,8 +46,18 @@ export default function AdminBlogPosts() {
   }, []);
 
   const fetchPosts = async () => {
-    const fetchedPosts = await blogPostsCollection.getAll();
-    setPosts(fetchedPosts as unknown as BlogPost[]);
+    try {
+      const fetchedPosts = await blogPostsCollection.getAll();
+      setPosts(fetchedPosts as unknown as BlogPost[]);
+    } catch (error) {
+      const appwriteError = error as AppwriteError;
+      console.error("Error fetching posts:", appwriteError);
+      toast({
+        title: "Error",
+        description: appwriteError.message || "Failed to fetch blog posts",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,27 +113,37 @@ export default function AdminBlogPosts() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (editingPost) {
-      const { $id, title, content, slug, publishDate, tags } = editingPost;
-      const updateData = { title, content, slug, publishDate, tags };
-      await blogPostsCollection.update($id, updateData);
-      setEditingPost(null);
-    } else {
-      await blogPostsCollection.create(newPost);
-      setNewPost({
-        title: "",
-        content: "",
-        slug: "",
-        publishDate: new Date().toISOString().split("T")[0],
-        tags: [],
-      });
+    try {
+      if (editingPost) {
+        const { $id, title, content, slug, publishDate, tags } = editingPost;
+        await blogPostsCollection.update($id, { title, content, slug, publishDate, tags });
+        toast({ title: "Success", description: "Blog post updated." });
+        setEditingPost(null);
+      } else {
+        await blogPostsCollection.create(newPost);
+        toast({ title: "Success", description: "Blog post created." });
+        setNewPost({ title: "", content: "", slug: "", publishDate: new Date().toISOString().split("T")[0], tags: [] });
+      }
+    } catch (error) {
+      const appwriteError = error as AppwriteError;
+      console.error("Error saving post:", appwriteError);
+      toast({ title: "Error", description: appwriteError.message || "Failed to save blog post", variant: "destructive" });
+    } finally {
+      fetchPosts();
     }
-    fetchPosts();
   };
 
   const handleDelete = async (id: string) => {
-    await blogPostsCollection.delete(id);
-    fetchPosts();
+    try {
+      await blogPostsCollection.delete(id);
+      toast({ title: "Success", description: "Blog post deleted." });
+    } catch (error) {
+      const appwriteError = error as AppwriteError;
+      console.error("Error deleting post:", appwriteError);
+      toast({ title: "Error", description: appwriteError.message || "Failed to delete blog post", variant: "destructive" });
+    } finally {
+      fetchPosts();
+    }
   };
 
   const handleEdit = (post: BlogPost) => {
@@ -140,17 +169,7 @@ export default function AdminBlogPosts() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input name="title" placeholder="Post Title" value={editingPost ? editingPost.title : newPost.title} onChange={handleInputChange} required />
             <Input name="slug" placeholder="Slug" value={editingPost ? editingPost.slug : newPost.slug} onChange={handleInputChange} required />
-            <Editor
-              apiKey="3gfikj0e15e3l5jsh9qyiq3gcpzr7pmnvh48nrammlonb6jl" // Your actual API key
-              init={{
-                height: 400,
-                menubar: false,
-                plugins: ["advlist autolink lists link image charmap print preview anchor", "searchreplace visualblocks code fullscreen", "insertdatetime media table paste code help wordcount"],
-                toolbar: "undo redo | formatselect | " + "bold italic backcolor | alignleft aligncenter " + "alignright alignjustify | bullist numlist outdent indent | " + "removeformat | help",
-              }}
-              value={editingPost ? editingPost.content : newPost.content}
-              onEditorChange={handleEditorChange}
-            />
+            <Editor apiKey={TINYMCE_API_KEY} init={TINYMCE_CONFIG} value={editingPost ? editingPost.content : newPost.content} onEditorChange={handleEditorChange} />
             <Input type="date" name="publishDate" value={editingPost ? editingPost.publishDate : newPost.publishDate} onChange={handleInputChange} required />
             <Input name="tags" placeholder="Tags (comma-separated)" value={editingPost ? editingPost.tags.join(", ") : newPost.tags.join(", ")} onChange={handleTagsChange} />
             <div className="flex space-x-2">
@@ -164,7 +183,7 @@ export default function AdminBlogPosts() {
           </form>
         </CardContent>
       </Card>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {posts.map((post) => (
           <Card key={post.$id}>
             <CardHeader>

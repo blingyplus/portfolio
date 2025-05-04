@@ -7,6 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { projectsCollection } from "../../lib/appwrite";
+import { TINYMCE_API_KEY, TINYMCE_CONFIG } from "../../lib/tinymce";
+import { toast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface Project {
   $id: string;
@@ -15,6 +19,13 @@ interface Project {
   imageUrl: string;
   projectUrl: string;
   technologies: string[];
+}
+
+interface AppwriteError {
+  message: string;
+  code: number;
+  type: string;
+  version: string;
 }
 
 export default function AdminProjects() {
@@ -28,14 +39,28 @@ export default function AdminProjects() {
     technologies: [],
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     fetchProjects();
   }, []);
 
   const fetchProjects = async () => {
-    const fetchedProjects = await projectsCollection.getAll();
-    setProjects(fetchedProjects as unknown as Project[]);
+    try {
+      const data = await projectsCollection.getAll();
+      setProjects(data as unknown as Project[]);
+    } catch (error) {
+      const appwriteError = error as AppwriteError;
+      console.error("Error fetching projects:", appwriteError);
+      toast({
+        title: "Error",
+        description: appwriteError.message || "Failed to fetch projects",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,6 +94,7 @@ export default function AdminProjects() {
       setImageFile(e.target.files[0]);
     }
   };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editingProject) {
@@ -80,24 +106,66 @@ export default function AdminProjects() {
         projectUrl,
         technologies,
       };
-      await projectsCollection.update($id, dataToUpdate, imageFile || undefined);
-      setEditingProject(null);
+      try {
+        await projectsCollection.update($id, dataToUpdate, imageFile || undefined);
+        setEditingProject(null);
+        toast({
+          title: "Success",
+          description: "Project updated successfully",
+        });
+      } catch (error) {
+        const appwriteError = error as AppwriteError;
+        console.error("Error updating project:", appwriteError);
+        toast({
+          title: "Error",
+          description: appwriteError.message || "Failed to update project",
+          variant: "destructive",
+        });
+      }
     } else {
-      await projectsCollection.create(newProject, imageFile || undefined);
-      setNewProject({
-        title: "",
-        description: "",
-        imageUrl: "",
-        projectUrl: "",
-        technologies: [],
-      });
+      try {
+        await projectsCollection.create(newProject, imageFile || undefined);
+        setNewProject({
+          title: "",
+          description: "",
+          imageUrl: "",
+          projectUrl: "",
+          technologies: [],
+        });
+        toast({
+          title: "Success",
+          description: "Project added successfully",
+        });
+      } catch (error) {
+        const appwriteError = error as AppwriteError;
+        console.error("Error creating project:", appwriteError);
+        toast({
+          title: "Error",
+          description: appwriteError.message || "Failed to create project",
+          variant: "destructive",
+        });
+      }
     }
     setImageFile(null);
     fetchProjects();
   };
 
   const handleDelete = async (id: string) => {
-    await projectsCollection.delete(id);
+    try {
+      await projectsCollection.delete(id);
+      toast({
+        title: "Success",
+        description: "Project deleted successfully",
+      });
+    } catch (error) {
+      const appwriteError = error as AppwriteError;
+      console.error("Error deleting project:", appwriteError);
+      toast({
+        title: "Error",
+        description: appwriteError.message || "Failed to delete project",
+        variant: "destructive",
+      });
+    }
     fetchProjects();
   };
 
@@ -109,9 +177,16 @@ export default function AdminProjects() {
     setEditingProject(null);
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Manage Projects</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold">Manage Projects</h1>
+        <Button onClick={() => router.push("/")}>View Site</Button>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle>{editingProject ? "Edit Project" : "Add New Project"}</CardTitle>
@@ -119,17 +194,7 @@ export default function AdminProjects() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input name="title" placeholder="Project Title" value={editingProject ? editingProject.title : newProject.title} onChange={handleInputChange} required />
-            <Editor
-              apiKey="3gfikj0e15e3l5jsh9qyiq3gcpzr7pmnvh48nrammlonb6jl"
-              init={{
-                height: 300,
-                menubar: false,
-                plugins: ["advlist autolink lists link image charmap print preview anchor", "searchreplace visualblocks code fullscreen", "insertdatetime media table paste code help wordcount"],
-                toolbar: "undo redo | formatselect | " + "bold italic backcolor | alignleft aligncenter " + "alignright alignjustify | bullist numlist outdent indent | " + "removeformat | help",
-              }}
-              value={editingProject ? editingProject.description : newProject.description}
-              onEditorChange={handleEditorChange}
-            />
+            <Editor apiKey={TINYMCE_API_KEY} init={TINYMCE_CONFIG} value={editingProject ? editingProject.description : newProject.description} onEditorChange={handleEditorChange} />
             <Input type="file" accept="image/*" onChange={handleImageChange} />
             <Input name="projectUrl" placeholder="Project URL" value={editingProject ? editingProject.projectUrl : newProject.projectUrl} onChange={handleInputChange} />
             <Input
@@ -149,7 +214,7 @@ export default function AdminProjects() {
           </form>
         </CardContent>
       </Card>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {projects.map((project) => (
           <Card key={project.$id}>
             <CardHeader>
@@ -157,7 +222,11 @@ export default function AdminProjects() {
             </CardHeader>
             <CardContent>
               <div dangerouslySetInnerHTML={{ __html: project.description.substring(0, 200) + "..." }} />
-              {project.imageUrl && <img src={project.imageUrl} alt={project.title} className="mt-2 max-w-full h-auto" />}
+              {project.imageUrl && (
+                <div className="relative mt-2 w-full h-48">
+                  <Image src={project.imageUrl} alt={project.title} fill className="object-cover rounded-md" />
+                </div>
+              )}
               <p>Technologies: {project.technologies.join(", ")}</p>
               <div className="flex space-x-2 mt-4">
                 <Button onClick={() => handleEdit(project)}>Edit</Button>

@@ -61,7 +61,7 @@ export default function ProjectDetails() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="space-y-8 sm:space-y-14 px-2 sm:px-4 lg:px-8">
       <Card>
         <CardHeader>
           <CardTitle className="text-3xl font-bold">{project.title}</CardTitle>
