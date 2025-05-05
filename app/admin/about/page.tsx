@@ -22,6 +22,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { TINYMCE_API_KEY, TINYMCE_CONFIG } from "../../lib/tinymce";
+import { useRouter } from "next/navigation";
 
 interface AboutInfo {
   $id: string;
@@ -38,6 +39,7 @@ export default function AdminAbout() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     fetchAboutInfo();
@@ -113,36 +115,52 @@ export default function AdminAbout() {
     }
   };
 
-  if (loading) return <Loading />;
-  if (error) return <ErrorMessage message={error} />;
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 w-48 bg-muted rounded"></div>
+          <div className="h-64 bg-muted rounded"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <ErrorMessage message={error} />
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Manage About Information</h1>
-      <Card>
-        <CardHeader>
-          <CardTitle>Update About Information</CardTitle>
+    <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h1 className="text-3xl font-bold">Manage About Page</h1>
+        <Button onClick={() => router.push("/")} className="w-full sm:w-auto">View Site</Button>
+      </div>
+
+      <Card className="mb-6">
+        <CardHeader className="pb-4">
+          <CardTitle>Edit About Content</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <Editor
-              apiKey={TINYMCE_API_KEY}
-              init={{
-                ...TINYMCE_CONFIG,
-                height: 500,
-                setup: function (editor) {
-                  editor.on("init", function () {
-                    updateYearsOfExperience();
-                  });
-                },
-              }}
-              value={formData.content}
-              onEditorChange={handleEditorChange}
-            />
-            <Input name="skills" placeholder="Skills (comma-separated)" value={formData.skills} onChange={handleInputChange} />
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="min-h-[300px]">
+              <Editor 
+                apiKey={TINYMCE_API_KEY} 
+                init={TINYMCE_CONFIG} 
+                value={formData.content} 
+                onEditorChange={handleEditorChange} 
+              />
+            </div>
+            <Input name="skills" placeholder="Skills (comma-separated)" value={formData.skills} onChange={handleInputChange} className="w-full" />
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button disabled={submitting}>{submitting ? "Updating..." : "Update About Information"}</Button>
+                <Button disabled={submitting} className="w-full sm:w-auto">
+                  {submitting ? "Updating..." : "Update About Information"}
+                </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
@@ -155,10 +173,9 @@ export default function AdminAbout() {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-          </div>
+          </form>
         </CardContent>
       </Card>
-      {/* ... (rest of the component) */}
     </div>
   );
 }

@@ -15,3 +15,7 @@ export const formatDate = (date: string | Date): string => {
     minute: "2-digit",
   });
 };
+
+export function stripHtmlTags(html: string): string {
+  return html.replace(/<[^>]*>/g, "");
+}

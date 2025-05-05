@@ -73,32 +73,32 @@ export default function HomePage() {
   if (error) return <ErrorMessage message={error} />;
 
   return (
-    <div className="space-y-8 sm:space-y-14 px-2 sm:px-4 lg:px-8">
+    <div className="space-y-8 sm:space-y-14 px-4 sm:px-6 lg:px-8">
       {/* Hero Section - Static Content */}
-      <div className="flex flex-col items-center justify-between min-h-[80vh] py-8 sm:py-16">
-        <div className="flex flex-col lg:flex-row items-center justify-between w-full mb-8 gap-8">
+      <div className="flex flex-col items-center justify-between min-h-[80vh] py-6 sm:py-12">
+        <div className="flex flex-col lg:flex-row items-center justify-between w-full mb-6 sm:mb-8 gap-6 sm:gap-8">
           <div className="lg:w-1/2 flex flex-col items-center">
-            <img src="/assets/russel.png" alt="Russel" className="rounded-full w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 object-cover" />
+            <img src="/assets/russel.png" alt="Russel" className="rounded-full w-40 h-40 sm:w-56 sm:h-56 lg:w-72 lg:h-72 object-cover shadow-lg" />
           </div>
           <div className="lg:w-1/2 text-center lg:text-left">
             <div className="max-w-md mx-auto lg:mx-0">
-              <h1 className="text-3xl sm:text-4xl font-bold mb-4">Russel Dankwa Boakye</h1>
-              <p className="text-lg sm:text-xl text-muted-foreground mb-6">Full-Stack Software Developer. | Crafting innovative digital solutions with code and creativity</p>
-              <div className="flex items-center justify-center lg:justify-start gap-4 mb-6">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">Russel Dankwa Boakye</h1>
+              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mb-4 sm:mb-6">Full-Stack Software Developer. | Crafting innovative digital solutions with code and creativity</p>
+              <div className="flex items-center justify-center lg:justify-start gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <a href="mailto:russelboakye@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
-                  <img src="https://img.icons8.com/material-outlined/48/000000/gmail-new.png" alt="Gmail" className="w-10 h-10 dark:invert" />
+                  <img src="https://img.icons8.com/material-outlined/48/000000/gmail-new.png" alt="Gmail" className="w-8 h-8 sm:w-10 sm:h-10 dark:invert" />
                 </a>
                 <a href="https://www.linkedin.com/in/russel-dankwa-boakye-904252255/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-                  <img src="https://img.icons8.com/material-outlined/48/000000/linkedin.png" alt="LinkedIn" className="w-10 h-10 dark:invert" />
+                  <img src="https://img.icons8.com/material-outlined/48/000000/linkedin.png" alt="LinkedIn" className="w-8 h-8 sm:w-10 sm:h-10 dark:invert" />
                 </a>
                 <a href="tel:+233240608256" className="text-muted-foreground hover:text-primary transition-colors">
-                  <img src="https://img.icons8.com/material-outlined/48/000000/phone.png" alt="Phone" className="w-10 h-10 dark:invert" />
+                  <img src="https://img.icons8.com/material-outlined/48/000000/phone.png" alt="Phone" className="w-8 h-8 sm:w-10 sm:h-10 dark:invert" />
                 </a>
                 <a href="https://github.com/blingyplus" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
-                  <img src="https://img.icons8.com/material-outlined/48/000000/github.png" alt="GitHub" className="w-10 h-10 dark:invert" />
+                  <img src="https://img.icons8.com/material-outlined/48/000000/github.png" alt="GitHub" className="w-8 h-8 sm:w-10 sm:h-10 dark:invert" />
                 </a>
               </div>
-              <Button asChild>
+              <Button asChild className="w-full sm:w-auto">
                 <Link href="/about">Learn More About Me</Link>
               </Button>
             </div>
@@ -111,16 +111,16 @@ export default function HomePage() {
 
       {/* Projects Section - Dynamic Content */}
       <div>
-        <h2 className="text-2xl font-semibold mb-4 text-center">Featured Projects</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-center">Featured Projects</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {loading
             ? Array.from({ length: 3 }).map((_, index) => (
                 <Card key={index} className="overflow-hidden">
-                  <Skeleton className="w-full h-48" />
-                  <CardHeader>
+                  <Skeleton className="w-full h-40 sm:h-48" />
+                  <CardHeader className="p-4 sm:p-6">
                     <Skeleton className="h-6 w-3/4" />
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="p-4 sm:p-6">
                     <Skeleton className="h-4 w-full mb-2" />
                     <Skeleton className="h-4 w-2/3 mb-4" />
                   </CardContent>
@@ -130,20 +130,20 @@ export default function HomePage() {
                 <div key={project.$id} className="transition-all duration-300 hover:-translate-y-1">
                   <Link href={`/projects/${project.$id}`}>
                     <Card className="overflow-hidden h-full flex flex-col hover:shadow-lg transition-all duration-300 cursor-pointer">
-                      <AppwriteImage src={project.imageUrl} alt={project.title} className="w-full h-48 object-cover" />
-                      <CardHeader>
-                        <CardTitle>{project.title}</CardTitle>
+                      <AppwriteImage src={project.imageUrl} alt={project.title} className="w-full h-40 sm:h-48 object-cover" />
+                      <CardHeader className="p-4 sm:p-6">
+                        <CardTitle className="text-lg sm:text-xl">{project.title}</CardTitle>
                       </CardHeader>
-                      <CardContent className="flex-grow">
-                        <p className="text-muted-foreground line-clamp-2">{stripHtmlTags(project.description)}</p>
+                      <CardContent className="p-4 sm:p-6 flex-grow">
+                        <p className="text-sm sm:text-base text-muted-foreground line-clamp-2">{stripHtmlTags(project.description)}</p>
                       </CardContent>
                     </Card>
                   </Link>
                 </div>
               ))}
         </div>
-        <div className="mt-8 text-center">
-          <Button asChild>
+        <div className="mt-6 sm:mt-8 text-center">
+          <Button asChild className="w-full sm:w-auto">
             <Link href="/projects">View All Projects</Link>
           </Button>
         </div>
@@ -151,16 +151,16 @@ export default function HomePage() {
 
       {/* Blog Posts Section - Dynamic Content */}
       <div>
-        <h2 className="text-2xl font-semibold mb-4 text-center">Latest Blog Posts</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-center">Latest Blog Posts</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {loading
             ? Array.from({ length: 3 }).map((_, index) => (
                 <Card key={index} className="flex flex-col h-full">
-                  <Skeleton className="w-full h-48" />
-                  <CardHeader>
+                  <Skeleton className="w-full h-40 sm:h-48" />
+                  <CardHeader className="p-4 sm:p-6">
                     <Skeleton className="h-6 w-3/4" />
                   </CardHeader>
-                  <CardContent className="flex-grow flex flex-col justify-between">
+                  <CardContent className="p-4 sm:p-6 flex-grow flex flex-col justify-between">
                     <div>
                       <Skeleton className="h-4 w-full mb-2" />
                       <Skeleton className="h-4 w-full mb-2" />
@@ -181,17 +181,17 @@ export default function HomePage() {
                 <div key={post.$id} className="transition-all duration-300 hover:-translate-y-1">
                   <Link href={`/blog/${post.slug}`}>
                     <Card className="flex flex-col h-full hover:shadow-lg transition-all duration-300 cursor-pointer">
-                      {post.imageUrl && <AppwriteImage src={post.imageUrl} alt={post.title} className="w-full h-48 object-cover" />}
-                      <CardHeader>
-                        <CardTitle className="line-clamp-2 hover:text-primary transition-colors">{post.title}</CardTitle>
+                      {post.imageUrl && <AppwriteImage src={post.imageUrl} alt={post.title} className="w-full h-40 sm:h-48 object-cover" />}
+                      <CardHeader className="p-4 sm:p-6">
+                        <CardTitle className="text-lg sm:text-xl line-clamp-2 hover:text-primary transition-colors">{post.title}</CardTitle>
                       </CardHeader>
-                      <CardContent className="flex-grow flex flex-col justify-between">
+                      <CardContent className="p-4 sm:p-6 flex-grow flex flex-col justify-between">
                         <div>
-                          <p className="text-muted-foreground line-clamp-3 mb-4">{stripHtmlTags(post.content)}</p>
+                          <p className="text-sm sm:text-base text-muted-foreground line-clamp-3 mb-4">{stripHtmlTags(post.content)}</p>
                           {post.tags && (
                             <div className="flex flex-wrap gap-2 mb-4">
                               {post.tags.slice(0, 3).map((tag, tagIndex) => (
-                                <Badge key={tagIndex} variant="secondary">
+                                <Badge key={tagIndex} variant="secondary" className="text-xs sm:text-sm">
                                   {tag}
                                 </Badge>
                               ))}
@@ -210,7 +210,7 @@ export default function HomePage() {
                 </div>
               ))}
         </div>
-        <div className="mt-8 text-center">
+        <div className="mt-6 sm:mt-8 text-center">
           <Button asChild>
             <Link href="/blog">View All Posts</Link>
           </Button>

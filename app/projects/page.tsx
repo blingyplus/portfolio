@@ -58,7 +58,7 @@ export default function ProjectsPage() {
   if (loading) {
     return (
       <div className="space-y-8">
-        <h1 className="text-3xl font-bold text-center">Projects</h1>
+        <h1 className="text-3xl font-bold">Projects</h1>
         <SkeletonLoader count={6} type="project" />
       </div>
     );
@@ -70,7 +70,7 @@ export default function ProjectsPage() {
 
   return (
     <div className="space-y-8 sm:space-y-14 px-2 sm:px-4 lg:px-8">
-      <h1 className="text-3xl font-bold">My Projects</h1>
+      <h1 className="text-3xl font-bold">Projects</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {paginatedProjects.map((project) => (
           <Link href={`/projects/${project.$id}`} key={project.$id} className="group">

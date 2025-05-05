@@ -63,14 +63,14 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   };
 
   return (
-    <div className="space-y-8 sm:space-y-14 px-2 sm:px-4 lg:px-8">
-      <article className="bg-card rounded-lg shadow-md overflow-hidden">
-        {post.imageUrl && <AppwriteImage src={post.imageUrl} alt={post.title} className="w-full h-64 object-cover" />}
-        <div className="p-6 space-y-4">
-          <h1 className="text-3xl font-bold text-center">{post.title}</h1>
-          <div className="flex justify-center items-center space-x-4">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <article className="space-y-8">
+        {post.imageUrl && <AppwriteImage src={post.imageUrl} alt={post.title} className="w-full h-64 object-cover rounded-lg" />}
+        <div className="space-y-6">
+          <h1 className="text-3xl font-bold">{post.title}</h1>
+          <div className="flex flex-wrap items-center gap-4">
             <span className="text-sm text-muted-foreground">{formatDate(post.$createdAt)}</span>
-            <div className="flex flex-wrap gap-2 justify-center">
+            <div className="flex flex-wrap gap-2">
               {post.tags.map((tag, index) => (
                 <Badge key={index} variant="secondary">
                   {tag}
@@ -82,8 +82,8 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         </div>
       </article>
 
-      <section>
-        <h2 className="text-2xl font-bold text-center mb-4">Related Posts</h2>
+      <section className="mt-12">
+        <h2 className="text-2xl font-bold mb-6">Related Posts</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {relatedPosts.map((relatedPost) => (
             <Card key={relatedPost.$id} className="hover:shadow-lg transition-shadow">
