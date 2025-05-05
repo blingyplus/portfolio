@@ -11,6 +11,7 @@ import { TINYMCE_API_KEY, TINYMCE_CONFIG } from "../../lib/tinymce";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { stripHtmlTags } from "../../lib/utils";
 
 interface Project {
   $id: string;
@@ -178,65 +179,91 @@ export default function AdminProjects() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 w-48 bg-muted rounded"></div>
+          <div className="h-64 bg-muted rounded"></div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-3xl font-bold">Manage Projects</h1>
-        <Button onClick={() => router.push("/")}>View Site</Button>
+        <Button onClick={() => router.push("/")} className="w-full sm:w-auto">
+          View Site
+        </Button>
       </div>
-      <Card>
-        <CardHeader>
+
+      <Card className="mb-6">
+        <CardHeader className="pb-4">
           <CardTitle>{editingProject ? "Edit Project" : "Add New Project"}</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <Input name="title" placeholder="Project Title" value={editingProject ? editingProject.title : newProject.title} onChange={handleInputChange} required />
-            <Editor apiKey={TINYMCE_API_KEY} init={TINYMCE_CONFIG} value={editingProject ? editingProject.description : newProject.description} onEditorChange={handleEditorChange} />
-            <Input type="file" accept="image/*" onChange={handleImageChange} />
-            <Input name="projectUrl" placeholder="Project URL" value={editingProject ? editingProject.projectUrl : newProject.projectUrl} onChange={handleInputChange} />
-            <Input
-              name="technologies"
-              placeholder="Technologies (comma-separated)"
-              value={editingProject ? editingProject.technologies.join(", ") : newProject.technologies.join(", ")}
-              onChange={handleTechnologiesChange}
-            />
-            <div className="flex space-x-2">
-              <Button type="submit">{editingProject ? "Update" : "Add"} Project</Button>
+            <Input name="title" placeholder="Project Title" value={editingProject ? editingProject.title : newProject.title} onChange={handleInputChange} required className="w-full" />
+            <div className="min-h-[300px]">
+              <Editor apiKey={TINYMCE_API_KEY} init={TINYMCE_CONFIG} value={editingProject ? editingProject.description : newProject.description} onEditorChange={handleEditorChange} />
+            </div>
+            <div className="space-y-4">
+              <Input type="file" accept="image/*" onChange={handleImageChange} className="w-full" />
+              <Input name="projectUrl" placeholder="Project URL" value={editingProject ? editingProject.projectUrl : newProject.projectUrl} onChange={handleInputChange} className="w-full" />
+              <Input
+                name="technologies"
+                placeholder="Technologies (comma-separated)"
+                value={editingProject ? editingProject.technologies.join(", ") : newProject.technologies.join(", ")}
+                onChange={handleTechnologiesChange}
+                className="w-full"
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button type="submit" className="w-full sm:w-auto">
+                {editingProject ? "Update Project" : "Add Project"}
+              </Button>
               {editingProject && (
-                <Button type="button" variant="outline" onClick={handleCancelEdit}>
-                  Cancel Edit
+                <Button type="button" variant="outline" onClick={handleCancelEdit} className="w-full sm:w-auto">
+                  Cancel
                 </Button>
               )}
             </div>
           </form>
         </CardContent>
       </Card>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {projects.map((project) => (
-          <Card key={project.$id}>
-            <CardHeader>
-              <CardTitle>{project.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div dangerouslySetInnerHTML={{ __html: project.description.substring(0, 200) + "..." }} />
-              {project.imageUrl && (
-                <div className="relative mt-2 w-full h-48">
-                  <Image src={project.imageUrl} alt={project.title} fill className="object-cover rounded-md" />
+
+      <div className="space-y-4">
+        <h2 className="text-2xl font-semibold">Existing Projects</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {projects.map((project) => (
+            <Card key={project.$id} className="hover:shadow-lg transition-shadow">
+              <CardContent className="p-0">
+                {project.imageUrl && (
+                  <div className="relative w-full h-48">
+                    <Image src={project.imageUrl} alt={project.title} fill className="object-cover rounded-t-lg" />
+                  </div>
+                )}
+                <div className="p-4">
+                  <div className="space-y-3">
+                    <div>
+                      <h3 className="text-xl font-semibold">{project.title}</h3>
+                      <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{stripHtmlTags(project.description)}</p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <Button variant="outline" onClick={() => handleEdit(project)} className="w-full sm:w-auto">
+                        Edit
+                      </Button>
+                      <Button variant="destructive" onClick={() => handleDelete(project.$id)} className="w-full sm:w-auto">
+                        Delete
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-              )}
-              <p>Technologies: {project.technologies.join(", ")}</p>
-              <div className="flex space-x-2 mt-4">
-                <Button onClick={() => handleEdit(project)}>Edit</Button>
-                <Button variant="destructive" onClick={() => handleDelete(project.$id)}>
-                  Delete
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -30,7 +30,8 @@
     "react-dom": "^18",
     "shadcn-ui": "^0.8.0",
     "tailwind-merge": "^2.5.2",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "yet-another-react-lightbox": "^3.23.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15",

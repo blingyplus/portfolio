@@ -55,7 +55,7 @@ export default function BlogPage() {
   if (loading) {
     return (
       <div className="space-y-8">
-        <h1 className="text-3xl font-bold text-center">Blog</h1>
+        <h1 className="text-3xl font-bold">Blog Posts</h1>
         <SkeletonLoader count={6} type="blog" />
       </div>
     );

@@ -6,9 +6,11 @@ import { useParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { projectsCollection } from "../../lib/appwrite";
-import AppwriteImage from "../../components/AppwriteImage";
+import ImageViewer from "../../components/ImageViewer";
 import ErrorMessage from "@/app/components/error";
 import Loading from "@/app/components/loading";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 interface Project {
   $id: string;
@@ -61,34 +63,39 @@ export default function ProjectDetails() {
   }
 
   return (
-    <div className="space-y-8 sm:space-y-14 px-2 sm:px-4 lg:px-8">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-3xl font-bold">{project.title}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <AppwriteImage src={project.imageUrl} alt={project.title} className="w-full h-auto object-cover rounded-lg" width={800} height={400} />
-          <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: project.description }} />
-          <div>
-            <h3 className="text-xl font-semibold mb-2">Technologies Used:</h3>
-            <div className="flex flex-wrap gap-2">
-              {project.technologies.map((tech, index) => (
-                <Badge key={index} variant="secondary">
-                  {tech}
-                </Badge>
-              ))}
-            </div>
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl sm:text-4xl font-bold mb-4">{project.title}</h1>
+          <div className="flex flex-wrap gap-2 mb-6">
+            {project.technologies.map((tech) => (
+              <span key={tech} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
+                {tech}
+              </span>
+            ))}
           </div>
-          {project.projectUrl && (
-            <div>
-              <h3 className="text-xl font-semibold mb-2">Project Link:</h3>
-              <a href={project.projectUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+        </div>
+
+        {project.imageUrl && (
+          <div className="relative w-full aspect-video rounded-lg overflow-hidden">
+            <Image src={project.imageUrl} alt={project.title} fill className="object-cover" />
+          </div>
+        )}
+
+        <div className="prose prose-lg dark:prose-invert max-w-none">
+          <div dangerouslySetInnerHTML={{ __html: project.description }} />
+        </div>
+
+        {project.projectUrl && (
+          <div className="pt-6">
+            <Button asChild>
+              <a href={project.projectUrl} target="_blank" rel="noopener noreferrer">
                 View Project
               </a>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
