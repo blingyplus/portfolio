@@ -1,11 +1,11 @@
 // app/about/page.tsx
 "use client";
 import { useState, useEffect } from "react";
-import { aboutCollection } from "../lib/appwrite";
+import { aboutCollection } from "@/app/lib/appwrite";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import Loading from "../components/loading";
-import ErrorMessage from "../components/error";
+import Loading from "@/app/components/loading";
+import ErrorMessage from "@/app/components/error";
 
 interface AboutData {
   content: string;

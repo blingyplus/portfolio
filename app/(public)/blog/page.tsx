@@ -3,13 +3,13 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { blogPostsCollection } from "../lib/appwrite";
+import { blogPostsCollection } from "@/app/lib/appwrite";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import ErrorMessage from "../components/error";
-import AppwriteImage from "../components/AppwriteImage";
+import ErrorMessage from "@/app/components/error";
+import AppwriteImage from "@/app/components/AppwriteImage";
 import { formatDate } from "@/app/lib/utils";
-import { SkeletonLoader } from "../components/skeleton-loader";
+import { SkeletonLoader } from "@/app/components/skeleton-loader";
 
 interface BlogPost {
   $id: string;

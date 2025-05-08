@@ -2,13 +2,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { blogPostsCollection } from "../../lib/appwrite";
+import { blogPostsCollection } from "@/app/lib/appwrite";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import Loading from "../../components/loading";
-import ErrorMessage from "../../components/error";
-import AppwriteImage from "../../components/AppwriteImage";
+import Loading from "@/app/components/loading";
+import ErrorMessage from "@/app/components/error";
+import AppwriteImage from "@/app/components/AppwriteImage";
 import { formatDate } from "@/app/lib/utils";
 
 interface BlogPost {

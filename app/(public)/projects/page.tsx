@@ -3,14 +3,14 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { projectsCollection } from "../lib/appwrite";
+import { projectsCollection } from "@/app/lib/appwrite";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import Loading from "../components/loading";
-import ErrorMessage from "../components/error";
-import AppwriteImage from "../components/AppwriteImage";
-import { SkeletonLoader } from "../components/skeleton-loader";
+import Loading from "@/app/components/loading";
+import ErrorMessage from "@/app/components/error";
+import AppwriteImage from "@/app/components/AppwriteImage";
+import { SkeletonLoader } from "@/app/components/skeleton-loader";
 
 interface Project {
   $id: string;
