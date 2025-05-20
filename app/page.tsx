@@ -199,9 +199,6 @@ export default function HomePage() {
                           )}
                         </div>
                         <div className="flex justify-between items-center mt-4">
-                          <Button asChild variant="outline">
-                            <Link href={`/blog/${post.slug}`}>Read More</Link>
-                          </Button>
                           <span className="text-sm text-muted-foreground">{formatDate(post.$createdAt)}</span>
                         </div>
                       </CardContent>
