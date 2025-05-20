@@ -24,6 +24,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 
 export const metadata = {
-  title: "blingyplus.",
-  description: "Welcome to my personal portfolio website",
+  title: "Russel Boakye Dankwa | Full Stack Developer Portfolio",
+  description: "Portfolio website of Russel Boakye Dankwa (Russel Bling), a Full Stack Developer specializing in modern web technologies. Explore my projects, blog posts, and professional journey.",
+  keywords: ["Russel Boakye Dankwa", "Russel Bling", "Full Stack Developer", "Web Developer", "Software Engineer", "Portfolio", "Projects", "Blog"],
+  authors: [{ name: "Russel Boakye Dankwa" }],
+  creator: "Russel Boakye Dankwa",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://blingyplus.com",
+    title: "Russel Boakye Dankwa | Full Stack Developer Portfolio",
+    description: "Portfolio website of Russel Boakye Dankwa (Russel Bling), a Full Stack Developer specializing in modern web technologies. Explore my projects, blog posts, and professional journey.",
+    siteName: "Russel Boakye Dankwa Portfolio",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Russel Boakye Dankwa | Full Stack Developer Portfolio",
+    description: "Portfolio website of Russel Boakye Dankwa (Russel Bling), a Full Stack Developer specializing in modern web technologies.",
+    creator: "@blingyplus",
+  },
 };
