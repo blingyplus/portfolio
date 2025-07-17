@@ -78,7 +78,7 @@ export default function ProjectDetails() {
 
         {project.imageUrl && (
           <div className="relative w-full aspect-video rounded-lg overflow-hidden">
-            <Image src={project.imageUrl} alt={project.title} fill className="object-cover" />
+            <ImageViewer src={project.imageUrl} alt={project.title} className="object-cover w-full h-full" />
           </div>
         )}
 
