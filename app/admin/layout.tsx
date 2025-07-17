@@ -85,7 +85,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
           )}
         </header>
-        <main className="max-w-7xl mx-auto px-4 py-8 sm:py-12">{children}</main>
+        <main className="container px-4 sm:px-6 lg:px-8 py-8">{children}</main>
       </div>
     </AuthCheck>
   );

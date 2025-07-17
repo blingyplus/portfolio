@@ -166,7 +166,7 @@ export default function AdminBlogPosts() {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div>
         <div className="animate-pulse space-y-4">
           <div className="h-8 w-48 bg-muted rounded"></div>
           <div className="h-64 bg-muted rounded"></div>
@@ -176,7 +176,7 @@ export default function AdminBlogPosts() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
+    <div>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-3xl font-bold">Manage Blog Posts</h1>
         <Button onClick={() => router.push("/")} className="w-full sm:w-auto">

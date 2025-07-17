@@ -10,28 +10,37 @@ export function SkeletonLoader({ count = 3, type = "project" }: SkeletonLoaderPr
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {Array.from({ length: count }).map((_, index) => (
-        <Card key={index} className={type === "blog" ? "flex flex-col h-full" : "overflow-hidden"}>
-          <Skeleton className="w-full h-48" />
-          <CardHeader>
-            <Skeleton className="h-6 w-3/4" />
+        <Card key={index} className="h-full flex flex-col">
+          {type === "project" && <Skeleton className="w-full h-48" />}
+          <CardHeader className="p-4 sm:p-6">
+            {/* Tall skeleton for blog title, normal for project */}
+            <Skeleton className={type === "blog" ? "h-10 w-3/4 mb-2" : "h-6 w-3/4"} />
           </CardHeader>
-          <CardContent className={type === "blog" ? "flex-grow flex flex-col justify-between" : ""}>
+          <CardContent className="p-4 sm:p-6 flex-grow flex flex-col justify-between">
             <div>
-              <Skeleton className="h-4 w-full mb-2" />
-              <Skeleton className="h-4 w-full mb-2" />
-              <Skeleton className="h-4 w-2/3 mb-4" />
-              {type === "blog" && (
+              {/* Blog: 2-3 lines for excerpt, Project: 1-2 lines */}
+              {type === "blog" ? (
                 <>
-                  <div className="flex gap-2 mb-4">
+                  <Skeleton className="h-4 w-full mb-2" />
+                  <Skeleton className="h-4 w-5/6 mb-2" />
+                  <Skeleton className="h-4 w-2/3 mb-4" />
+                  <div className="flex flex-wrap gap-2 mb-4">
                     <Skeleton className="h-6 w-16" />
                     <Skeleton className="h-6 w-16" />
-                  </div>
-                  <div className="flex justify-between items-center mt-4">
-                    <Skeleton className="h-10 w-32" />
-                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-6 w-20" />
                   </div>
                 </>
+              ) : (
+                <>
+                  <Skeleton className="h-4 w-full mb-2" />
+                  <Skeleton className="h-4 w-2/3 mb-4" />
+                </>
               )}
+            </div>
+            {/* Bottom row: left and right skeletons */}
+            <div className="flex justify-between items-center mt-4">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-4 w-32" />
             </div>
           </CardContent>
         </Card>

@@ -117,7 +117,7 @@ export default function AdminAbout() {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div>
         <div className="animate-pulse space-y-4">
           <div className="h-8 w-48 bg-muted rounded"></div>
           <div className="h-64 bg-muted rounded"></div>
@@ -128,17 +128,19 @@ export default function AdminAbout() {
 
   if (error) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <div>
         <ErrorMessage message={error} />
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
+    <div>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-3xl font-bold">Manage About Page</h1>
-        <Button onClick={() => router.push("/")} className="w-full sm:w-auto">View Site</Button>
+        <Button onClick={() => router.push("/")} className="w-full sm:w-auto">
+          View Site
+        </Button>
       </div>
 
       <Card className="mb-6">
@@ -148,12 +150,7 @@ export default function AdminAbout() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="min-h-[300px]">
-              <Editor 
-                apiKey={TINYMCE_API_KEY} 
-                init={TINYMCE_CONFIG} 
-                value={formData.content} 
-                onEditorChange={handleEditorChange} 
-              />
+              <Editor apiKey={TINYMCE_API_KEY} init={TINYMCE_CONFIG} value={formData.content} onEditorChange={handleEditorChange} />
             </div>
             <Input name="skills" placeholder="Skills (comma-separated)" value={formData.skills} onChange={handleInputChange} className="w-full" />
             <AlertDialog>
