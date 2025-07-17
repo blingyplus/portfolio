@@ -81,25 +81,23 @@ export default function AboutPage() {
   if (!aboutData) return <ErrorMessage message="No data available." />;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl sm:text-4xl font-bold mb-4">About Me</h1>
-        </div>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-4">About Me</h1>
+      </div>
 
-        <div className="prose prose-lg dark:prose-invert max-w-none">
-          <div dangerouslySetInnerHTML={{ __html: aboutData.content }} />
-        </div>
+      <div className="prose prose-lg dark:prose-invert max-w-none">
+        <div dangerouslySetInnerHTML={{ __html: aboutData.content }} />
+      </div>
 
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">Skills</h2>
-          <div className="flex flex-wrap gap-2">
-            {aboutData.skills.map((skill) => (
-              <span key={skill} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
-                {skill}
-              </span>
-            ))}
-          </div>
+      <div>
+        <h2 className="text-2xl font-semibold mb-4">Skills</h2>
+        <div className="flex flex-wrap gap-2">
+          {aboutData.skills.map((skill) => (
+            <span key={skill} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
+              {skill}
+            </span>
+          ))}
         </div>
       </div>
     </div>

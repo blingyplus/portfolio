@@ -69,7 +69,7 @@ export default function ProjectsPage() {
   const paginatedProjects = projects.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
   return (
-    <div className="space-y-8 sm:space-y-14 px-2 sm:px-4 lg:px-8">
+    <div className="space-y-8 sm:space-y-14">
       <h1 className="text-3xl font-bold">Projects</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {paginatedProjects.map((project) => (

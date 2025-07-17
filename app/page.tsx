@@ -73,7 +73,7 @@ export default function HomePage() {
   if (error) return <ErrorMessage message={error} />;
 
   return (
-    <div className="space-y-8 sm:space-y-14 px-4 sm:px-6 lg:px-8">
+    <div className="space-y-8 sm:space-y-14">
       {/* Hero Section - Static Content */}
       <div className="flex flex-col items-center justify-between min-h-[80vh] py-6 sm:py-12">
         <div className="flex flex-col lg:flex-row items-center justify-between w-full mb-6 sm:mb-8 gap-6 sm:gap-8">
@@ -155,8 +155,8 @@ export default function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {loading
             ? Array.from({ length: 3 }).map((_, index) => (
-                <Card key={index} className="flex flex-col h-full">
-                  <Skeleton className="w-full h-40 sm:h-48" />
+                <Card key={index} className="h-full flex flex-col">
+                  {index % 2 === 0 && <Skeleton className="w-full h-48" />}
                   <CardHeader className="p-4 sm:p-6">
                     <Skeleton className="h-6 w-3/4" />
                   </CardHeader>
@@ -171,7 +171,7 @@ export default function HomePage() {
                       </div>
                     </div>
                     <div className="flex justify-between items-center mt-4">
-                      <Skeleton className="h-10 w-32" />
+                      <Skeleton className="h-4 w-24" />
                       <Skeleton className="h-4 w-24" />
                     </div>
                   </CardContent>
@@ -180,8 +180,8 @@ export default function HomePage() {
             : blogPosts.map((post) => (
                 <div key={post.$id} className="transition-all duration-300 hover:-translate-y-1">
                   <Link href={`/blog/${post.slug}`}>
-                    <Card className="flex flex-col h-full hover:shadow-lg transition-all duration-300 cursor-pointer">
-                      {post.imageUrl && <AppwriteImage src={post.imageUrl} alt={post.title} className="w-full h-40 sm:h-48 object-cover" />}
+                    <Card className="h-full flex flex-col hover:shadow-lg transition-all duration-300 cursor-pointer">
+                      {post.imageUrl && <AppwriteImage src={post.imageUrl} alt={post.title} className="w-full h-48 object-cover" />}
                       <CardHeader className="p-4 sm:p-6">
                         <CardTitle className="text-lg sm:text-xl line-clamp-2 hover:text-primary transition-colors">{post.title}</CardTitle>
                       </CardHeader>
@@ -199,6 +199,7 @@ export default function HomePage() {
                           )}
                         </div>
                         <div className="flex justify-between items-center mt-4">
+                          <span className="text-sm text-muted-foreground">Read More</span>
                           <span className="text-sm text-muted-foreground">{formatDate(post.$createdAt)}</span>
                         </div>
                       </CardContent>
