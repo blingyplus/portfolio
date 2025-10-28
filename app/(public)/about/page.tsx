@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { aboutCollection } from "@/app/lib/appwrite";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import Loading from "@/app/components/loading";
 import ErrorMessage from "@/app/components/error";
 
@@ -100,6 +101,14 @@ export default function AboutPage() {
               </span>
             ))}
           </div>
+        </div>
+
+        <div className="flex justify-center pt-8">
+          <Button asChild size="lg" className="text-lg px-8 py-6">
+            <a href={process.env.NEXT_PUBLIC_UPWORK_URL || "https://www.upwork.com/freelancers/~01304d3a781037ba57?mp_source=share"} target="_blank" rel="noopener noreferrer">
+              Hire Me on Upwork
+            </a>
+          </Button>
         </div>
       </div>
     </div>

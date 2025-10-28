@@ -69,7 +69,7 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b bg-background">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/70 backdrop-blur-xl border-border/50">
         <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link href="/" className="flex items-center space-x-2 font-bold text-xl sm:text-2xl">
             blingyplus.
@@ -82,7 +82,10 @@ const Navbar = () => {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={cn("transition-colors hover:text-foreground px-3 py-2 rounded-md", pathname === item.href ? "text-foreground bg-accent" : "text-foreground/60 hover:bg-accent/50")}
+                  className={cn(
+                    "transition-colors hover:text-foreground px-3 py-2 rounded-md",
+                    pathname === item.href ? "text-foreground bg-background/60 backdrop-blur-sm" : "text-foreground/70 hover:bg-background/40 hover:backdrop-blur-sm"
+                  )}
                 >
                   {item.label}
                 </Link>
@@ -93,7 +96,10 @@ const Navbar = () => {
           <div className="flex items-center space-x-4">
             <ThemeToggle />
             {/* Hamburger Menu Button - Only for very small screens */}
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="sm:hidden rounded-full px-3 py-2 bg-background border border-border hover:bg-accent transition-all duration-200">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="sm:hidden rounded-full px-3 py-2 bg-background/60 backdrop-blur-sm border border-border/50 hover:bg-background/80 transition-all duration-200"
+            >
               {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
