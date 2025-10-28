@@ -3,6 +3,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { ThemeProvider } from "./components/theme-provider";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import MobileBottomDock from "./components/MobileBottomDock";
 import "./globals.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -13,8 +14,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AuthProvider>
             <div className="flex min-h-screen flex-col">
               <Navbar />
-              <main className="flex-1 container px-4 sm:px-6 lg:px-8 py-8">{children}</main>
+              <main className="flex-1 container px-4 sm:px-6 lg:px-8 py-8 pb-24 sm:pb-8 md:pb-8">{children}</main>
               <Footer />
+              <MobileBottomDock />
             </div>
           </AuthProvider>
         </ThemeProvider>
