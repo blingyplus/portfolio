@@ -83,7 +83,7 @@ export default function HomePage() {
           <div className="lg:w-1/2 text-center lg:text-left">
             <div className="max-w-md mx-auto lg:mx-0">
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">Russel Dankwa Boakye</h1>
-              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mb-4 sm:mb-6">Full-Stack Software Developer. | Crafting innovative digital solutions with code and creativity</p>
+              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mb-4 sm:mb-6">Full-Stack Developer turning coffee and curiosity into working code. I build things that matter.</p>
               <div className="flex items-center justify-center lg:justify-start gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <a href="mailto:russelboakye@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
                   <img src="https://img.icons8.com/material-outlined/48/000000/gmail-new.png" alt="Gmail" className="w-8 h-8 sm:w-10 sm:h-10 dark:invert" />
@@ -98,9 +98,16 @@ export default function HomePage() {
                   <img src="https://img.icons8.com/material-outlined/48/000000/github.png" alt="GitHub" className="w-8 h-8 sm:w-10 sm:h-10 dark:invert" />
                 </a>
               </div>
-              <Button asChild className="w-full sm:w-auto">
-                <Link href="/about">Learn More About Me</Link>
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button asChild className="w-full sm:w-auto">
+                  <a href={process.env.NEXT_PUBLIC_UPWORK_URL || "https://www.upwork.com/freelancers/~01304d3a781037ba57?mp_source=share"} target="_blank" rel="noopener noreferrer">
+                    Hire Me on Upwork
+                  </a>
+                </Button>
+                <Button asChild variant="outline" className="w-full sm:w-auto">
+                  <Link href="/about">Learn More</Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
