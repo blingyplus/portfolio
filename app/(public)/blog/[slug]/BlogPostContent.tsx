@@ -8,6 +8,7 @@ import Link from "next/link";
 import Loading from "@/app/components/loading";
 import ErrorMessage from "@/app/components/error";
 import AppwriteImage from "@/app/components/AppwriteImage";
+import ShareButtons from "@/app/components/ShareButtons";
 import { formatDate, stripHtmlTags } from "@/app/lib/utils";
 
 interface BlogPost {
@@ -26,6 +27,14 @@ export default function BlogPostContent({ slug }: { slug: string }) {
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [shareUrl, setShareUrl] = useState<string>("");
+
+  useEffect(() => {
+    // Set the share URL
+    if (typeof window !== "undefined") {
+      setShareUrl(window.location.href);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -79,6 +88,7 @@ export default function BlogPostContent({ slug }: { slug: string }) {
           </div>
           <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: post.content }} />
         </div>
+        {shareUrl && <ShareButtons title={post.title} url={shareUrl} description={stripHtmlTagsLocal(post.content).substring(0, 160)} />}
       </article>
 
       <section className="mt-12">

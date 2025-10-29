@@ -15,7 +15,7 @@ const Footer = () => {
             <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
               Built by{" "}
               <a href="https://github.com/blingyplus" target="_blank" rel="noreferrer" className="font-medium underline underline-offset-4">
-                blingyplus
+                Russel Boakye
               </a>
               . The source code is available on{" "}
               <a href="https://github.com/blingyplus/portfolio" target="_blank" rel="noreferrer" className="font-medium underline underline-offset-4">

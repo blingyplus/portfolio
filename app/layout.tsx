@@ -4,6 +4,7 @@ import { ThemeProvider } from "./components/theme-provider";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import MobileBottomDock from "./components/MobileBottomDock";
+import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <MobileBottomDock />
             </div>
           </AuthProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
