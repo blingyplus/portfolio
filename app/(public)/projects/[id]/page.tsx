@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { projectsCollection } from "@/app/lib/appwrite";
 import { stripHtmlTags } from "@/app/lib/utils";
 import ProjectDetailsContent from "./ProjectDetailsContent";
+import { siteConfig } from "@/app/config/site";
 
 interface Project {
   $id: string;
@@ -29,8 +30,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
     return {
       title: project.title,
       description: strippedDescription,
-      keywords: [...project.technologies, "Russel Boakye Dankwa", "Russel Bling", "Projects", "Web Development"],
-      authors: [{ name: "Russel Boakye Dankwa" }],
+      keywords: [...project.technologies, siteConfig.personal.fullName, siteConfig.personal.nickname, "Projects", "Web Development"],
+      authors: [{ name: siteConfig.personal.fullName }],
       openGraph: {
         title: project.title,
         description: strippedDescription,
@@ -40,13 +41,13 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
         card: "summary_large_image",
         title: project.title,
         description: strippedDescription,
-        creator: "@blingyplus",
+        creator: siteConfig.social.twitter,
       },
     };
   } catch (error) {
     return {
-      title: "Project | Russel Boakye Dankwa",
-      description: "View project details by Russel Boakye Dankwa.",
+      title: `Project | ${siteConfig.personal.fullName}`,
+      description: `View project details by ${siteConfig.personal.fullName}.`,
     };
   }
 }

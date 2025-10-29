@@ -1,5 +1,15 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Customization
+
+All personal information, branding, and site metadata can be customized in **`app/config/site.ts`**. Simply update the values in that file to personalize the portfolio with your own information. This includes:
+
+- Personal information (name, email, phone, location)
+- Branding (brand name, hashtags)
+- URLs (website, GitHub, LinkedIn, social media)
+- Metadata (SEO titles, descriptions, keywords)
+- Footer text and taglines
+
 ## Getting Started
 
 First, run the development server:

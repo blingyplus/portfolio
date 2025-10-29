@@ -26,6 +26,9 @@ export default function ProjectDetailsContent() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Scroll to top when page loads
+    window.scrollTo(0, 0);
+
     const fetchProject = async () => {
       if (!id) {
         setError("No project ID provided");

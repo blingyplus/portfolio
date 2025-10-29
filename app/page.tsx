@@ -14,6 +14,7 @@ import ErrorMessage from "./components/error";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDate } from "@/app/lib/utils";
+import { siteConfig } from "./config/site";
 
 interface Project {
   $id: string;
@@ -78,29 +79,29 @@ export default function HomePage() {
       <div className="flex flex-col items-center justify-between min-h-[80vh] py-6 sm:py-12">
         <div className="flex flex-col lg:flex-row items-center justify-between w-full mb-6 sm:mb-8 gap-6 sm:gap-8">
           <div className="lg:w-1/2 flex flex-col items-center">
-            <img src="/assets/russel.png" alt="Russel" className="rounded-full w-40 h-40 sm:w-56 sm:h-56 lg:w-72 lg:h-72 object-cover shadow-lg" />
+            <img src={siteConfig.images.profile} alt={siteConfig.images.alt} className="rounded-full w-40 h-40 sm:w-56 sm:h-56 lg:w-72 lg:h-72 object-cover shadow-lg" />
           </div>
           <div className="lg:w-1/2 text-center lg:text-left">
             <div className="max-w-md mx-auto lg:mx-0">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">Russel Dankwa Boakye</h1>
-              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mb-4 sm:mb-6">Full-Stack Developer turning coffee and curiosity into working code. I build things that matter.</p>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4">{siteConfig.personal.displayName}</h1>
+              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mb-4 sm:mb-6">{siteConfig.metadata.tagline}</p>
               <div className="flex items-center justify-center lg:justify-start gap-3 sm:gap-4 mb-4 sm:mb-6">
-                <a href="mailto:russelboakye@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href={`mailto:${siteConfig.personal.email}`} className="text-muted-foreground hover:text-primary transition-colors">
                   <img src="https://img.icons8.com/material-outlined/48/000000/gmail-new.png" alt="Gmail" className="w-8 h-8 sm:w-10 sm:h-10 dark:invert" />
                 </a>
-                <a href="https://www.linkedin.com/in/russel-dankwa-boakye-904252255/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href={siteConfig.urls.linkedin} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
                   <img src="https://img.icons8.com/material-outlined/48/000000/linkedin.png" alt="LinkedIn" className="w-8 h-8 sm:w-10 sm:h-10 dark:invert" />
                 </a>
-                <a href="tel:+233240608256" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href={`tel:${siteConfig.personal.phone}`} className="text-muted-foreground hover:text-primary transition-colors">
                   <img src="https://img.icons8.com/material-outlined/48/000000/phone.png" alt="Phone" className="w-8 h-8 sm:w-10 sm:h-10 dark:invert" />
                 </a>
-                <a href="https://github.com/blingyplus" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href={siteConfig.urls.github} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
                   <img src="https://img.icons8.com/material-outlined/48/000000/github.png" alt="GitHub" className="w-8 h-8 sm:w-10 sm:h-10 dark:invert" />
                 </a>
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button asChild className="w-full sm:w-auto">
-                  <a href={process.env.NEXT_PUBLIC_UPWORK_URL || "https://www.upwork.com/freelancers/~01304d3a781037ba57?mp_source=share"} target="_blank" rel="noopener noreferrer">
+                  <a href={siteConfig.urls.upwork} target="_blank" rel="noopener noreferrer">
                     Hire Me on Upwork
                   </a>
                 </Button>

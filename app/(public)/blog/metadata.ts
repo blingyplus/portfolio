@@ -1,20 +1,21 @@
 import { Metadata } from "next";
+import { siteConfig } from "@/app/config/site";
 
 export const metadata: Metadata = {
-  title: "Blog | Russel Boakye Dankwa - Web Development & Technology Articles",
-  description: "Read articles by Russel Boakye Dankwa (Russel Bling) about web development, programming, and technology. Stay updated with the latest insights and tutorials.",
-  keywords: ["Russel Boakye Dankwa", "Russel Bling", "Blog", "Web Development", "Programming", "Technology", "Tutorials", "Articles"],
-  authors: [{ name: "Russel Boakye Dankwa" }],
+  title: `Blog | ${siteConfig.personal.fullName} - Web Development & Technology Articles`,
+  description: `Read articles by ${siteConfig.personal.fullName} (${siteConfig.personal.nickname}) about web development, programming, and technology. Stay updated with the latest insights and tutorials.`,
+  keywords: [siteConfig.personal.fullName, siteConfig.personal.nickname, "Blog", "Web Development", "Programming", "Technology", "Tutorials", "Articles"],
+  authors: [{ name: siteConfig.personal.fullName }],
   openGraph: {
-    title: "Blog | Russel Boakye Dankwa - Web Development & Technology Articles",
-    description: "Read articles by Russel Boakye Dankwa (Russel Bling) about web development, programming, and technology. Stay updated with the latest insights and tutorials.",
+    title: `Blog | ${siteConfig.personal.fullName} - Web Development & Technology Articles`,
+    description: `Read articles by ${siteConfig.personal.fullName} (${siteConfig.personal.nickname}) about web development, programming, and technology. Stay updated with the latest insights and tutorials.`,
     type: "website",
-    siteName: "Russel Boakye Dankwa Portfolio",
+    siteName: siteConfig.brand.siteName,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Blog | Russel Boakye Dankwa - Web Development & Technology Articles",
-    description: "Read articles by Russel Boakye Dankwa (Russel Bling) about web development, programming, and technology.",
-    creator: "@blingyplus",
+    title: `Blog | ${siteConfig.personal.fullName} - Web Development & Technology Articles`,
+    description: `Read articles by ${siteConfig.personal.fullName} (${siteConfig.personal.nickname}) about web development, programming, and technology.`,
+    creator: siteConfig.social.twitter,
   },
 };

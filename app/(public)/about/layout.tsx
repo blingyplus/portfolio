@@ -1,21 +1,22 @@
 import { Metadata } from "next";
+import { siteConfig, getFullTitle } from "@/app/config/site";
 
 export const metadata: Metadata = {
   title: "About Me",
-  description: "Learn more about Russel Boakye Dankwa (Russel Bling), a Full Stack Developer with expertise in modern web technologies and software engineering.",
-  keywords: ["Russel Boakye Dankwa", "Russel Bling", "About", "Ghana", "Africa", "Full Stack Developer", "Web Developer", "Software Engineer"],
-  authors: [{ name: "Russel Boakye Dankwa" }],
+  description: `Learn more about ${siteConfig.personal.fullName} (${siteConfig.personal.nickname}), a Full Stack Developer with expertise in modern web technologies and software engineering.`,
+  keywords: [siteConfig.personal.fullName, siteConfig.personal.nickname, "About", siteConfig.personal.location, "Full Stack Developer", "Web Developer", "Software Engineer"],
+  authors: [{ name: siteConfig.personal.fullName }],
   openGraph: {
-    title: "About Me | Russel Boakye Dankwa",
-    description: "Learn more about Russel Boakye Dankwa (Russel Bling), a Full Stack Developer with expertise in modern web technologies.",
+    title: `About Me | ${siteConfig.personal.fullName}`,
+    description: `Learn more about ${siteConfig.personal.fullName} (${siteConfig.personal.nickname}), a Full Stack Developer with expertise in modern web technologies.`,
     type: "website",
-    siteName: "Russel Boakye Dankwa Portfolio",
+    siteName: siteConfig.brand.siteName,
   },
   twitter: {
     card: "summary_large_image",
-    title: "About Me | Russel Boakye Dankwa",
-    description: "Learn more about Russel Boakye Dankwa (Russel Bling), a Full Stack Developer with expertise in modern web technologies.",
-    creator: "@blingyplus",
+    title: `About Me | ${siteConfig.personal.fullName}`,
+    description: `Learn more about ${siteConfig.personal.fullName} (${siteConfig.personal.nickname}), a Full Stack Developer with expertise in modern web technologies.`,
+    creator: siteConfig.social.twitter,
   },
 };
 

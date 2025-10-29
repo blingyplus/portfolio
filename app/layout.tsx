@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import MobileBottomDock from "./components/MobileBottomDock";
 import { Toaster } from "@/components/ui/toaster";
+import { siteConfig, getFullTitle, getDescription } from "./config/site";
 import "./globals.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -28,23 +29,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 
 export const metadata = {
-  title: "Russel Boakye Dankwa | Full Stack Developer Portfolio",
-  description: "Portfolio website of Russel Boakye Dankwa (Russel Bling), a Full Stack Developer specializing in modern web technologies. Explore my projects, blog posts, and professional journey.",
-  keywords: ["Russel Boakye Dankwa", "Russel Bling", "Full Stack Developer", "Web Developer", "Software Engineer", "Portfolio", "Projects", "Blog"],
-  authors: [{ name: "Russel Boakye Dankwa" }],
-  creator: "Russel Boakye Dankwa",
+  title: getFullTitle(),
+  description: getDescription(),
+  keywords: [siteConfig.personal.fullName, siteConfig.personal.nickname, ...siteConfig.metadata.defaultKeywords],
+  authors: [{ name: siteConfig.personal.fullName }],
+  creator: siteConfig.personal.fullName,
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://blingyplus.com",
-    title: "Russel Boakye Dankwa | Full Stack Developer Portfolio",
-    description: "Portfolio website of Russel Boakye Dankwa (Russel Bling), a Full Stack Developer specializing in modern web technologies. Explore my projects, blog posts, and professional journey.",
-    siteName: "Russel Boakye Dankwa Portfolio",
+    url: siteConfig.urls.site,
+    title: getFullTitle(),
+    description: getDescription(),
+    siteName: siteConfig.brand.siteName,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Russel Boakye Dankwa | Full Stack Developer Portfolio",
-    description: "Portfolio website of Russel Boakye Dankwa (Russel Bling), a Full Stack Developer specializing in modern web technologies.",
-    creator: "@blingyplus",
+    title: getFullTitle(),
+    description: getDescription(),
+    creator: siteConfig.social.twitter,
   },
 };

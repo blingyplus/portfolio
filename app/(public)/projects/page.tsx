@@ -38,6 +38,9 @@ export default function ProjectsPage() {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
+    // Scroll to top when page loads
+    window.scrollTo(0, 0);
+
     const fetchProjects = async () => {
       try {
         setLoading(true);

@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./theme-toggle";
 import { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
+import { siteConfig } from "../config/site";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -72,7 +73,7 @@ const Navbar = () => {
       <header className="sticky top-0 z-50 w-full border-b bg-background/70 backdrop-blur-xl border-border/50">
         <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link href="/" className="flex items-center space-x-2 font-bold text-xl sm:text-2xl">
-            blingyplus.
+            {siteConfig.brand.name}.
           </Link>
 
           {/* Desktop Navigation */}

@@ -42,7 +42,7 @@ const MobileBottomDock = () => {
         isVisible ? "translate-y-0" : "translate-y-24"
       )}
     >
-      <div className="flex items-center justify-around gap-1 px-4 py-3 bg-background/70 backdrop-blur-xl border border-border/50 rounded-full shadow-2xl">
+      <div className="flex items-center justify-around gap-1 px-3 py-3 bg-background/70 backdrop-blur-xl border border-border/50 rounded-full shadow-2xl">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
 
@@ -51,7 +51,7 @@ const MobileBottomDock = () => {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center justify-center px-5 py-2.5 rounded-full transition-all duration-200 active:scale-95 font-medium text-sm",
+                "flex items-center justify-center px-2.5 sm:px-3 py-2 rounded-full transition-all duration-200 active:scale-95 font-medium text-xs sm:text-sm whitespace-nowrap",
                 isActive ? "text-primary bg-background/80 backdrop-blur-sm" : "text-foreground hover:text-foreground hover:bg-background/50"
               )}
             >

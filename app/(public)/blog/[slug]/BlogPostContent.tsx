@@ -37,6 +37,9 @@ export default function BlogPostContent({ slug }: { slug: string }) {
   }, []);
 
   useEffect(() => {
+    // Scroll to top when page loads
+    window.scrollTo(0, 0);
+
     const fetchPost = async () => {
       try {
         setLoading(true);
