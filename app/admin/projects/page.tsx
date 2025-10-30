@@ -16,7 +16,8 @@ import { stripHtmlTags } from "../../lib/utils";
 interface Project {
   $id: string;
   title: string;
-  description: string;
+  description?: string;
+  descriptionLong?: string;
   imageUrl: string;
   projectUrl: string;
   technologies: string[];
@@ -35,6 +36,7 @@ export default function AdminProjects() {
   const [newProject, setNewProject] = useState<Omit<Project, "$id">>({
     title: "",
     description: "",
+    descriptionLong: "",
     imageUrl: "",
     projectUrl: "",
     technologies: [],
@@ -67,7 +69,7 @@ export default function AdminProjects() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (editingProject) {
-      setEditingProject({ ...editingProject, [name]: value });
+      setEditingProject({ ...editingProject, [name]: value } as Project);
     } else {
       setNewProject((prev) => ({ ...prev, [name]: value }));
     }
@@ -75,9 +77,9 @@ export default function AdminProjects() {
 
   const handleEditorChange = (content: string) => {
     if (editingProject) {
-      setEditingProject({ ...editingProject, description: content });
+      setEditingProject({ ...editingProject, descriptionLong: content });
     } else {
-      setNewProject((prev) => ({ ...prev, description: content }));
+      setNewProject((prev) => ({ ...prev, descriptionLong: content }));
     }
   };
 
@@ -99,10 +101,10 @@ export default function AdminProjects() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editingProject) {
-      const { $id, title, description, imageUrl, projectUrl, technologies } = editingProject;
-      const dataToUpdate = {
+      const { $id, title, descriptionLong, imageUrl, projectUrl, technologies } = editingProject;
+      const dataToUpdate: Record<string, unknown> = {
         title,
-        description,
+        descriptionLong: descriptionLong ?? "",
         imageUrl,
         projectUrl,
         technologies,
@@ -125,10 +127,17 @@ export default function AdminProjects() {
       }
     } else {
       try {
-        await projectsCollection.create(newProject, imageFile || undefined);
+        const payload: Record<string, unknown> = {
+          ...newProject,
+          descriptionLong: newProject.descriptionLong ?? newProject.description ?? "",
+        };
+        // Clean up legacy field on create
+        delete (payload as any).description;
+        await projectsCollection.create(payload, imageFile || undefined);
         setNewProject({
           title: "",
           description: "",
+          descriptionLong: "",
           imageUrl: "",
           projectUrl: "",
           technologies: [],
@@ -171,6 +180,10 @@ export default function AdminProjects() {
   };
 
   const handleEdit = (project: Project) => {
+    // Ensure editor shows the long description if present
+    if (!project.descriptionLong && project.description) {
+      project = { ...project, descriptionLong: project.description };
+    }
     setEditingProject(project);
   };
 
@@ -206,7 +219,7 @@ export default function AdminProjects() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input name="title" placeholder="Project Title" value={editingProject ? editingProject.title : newProject.title} onChange={handleInputChange} required className="w-full" />
             <div className="min-h-[300px]">
-              <Editor apiKey={TINYMCE_API_KEY} init={TINYMCE_CONFIG} value={editingProject ? editingProject.description : newProject.description} onEditorChange={handleEditorChange} />
+              <Editor apiKey={TINYMCE_API_KEY} init={TINYMCE_CONFIG} value={editingProject ? (editingProject.descriptionLong ?? editingProject.description ?? "") : (newProject.descriptionLong ?? newProject.description ?? "")} onEditorChange={handleEditorChange} />
             </div>
             <div className="space-y-4">
               <Input type="file" accept="image/*" onChange={handleImageChange} className="w-full" />
@@ -248,7 +261,7 @@ export default function AdminProjects() {
                   <div className="space-y-3">
                     <div>
                       <h3 className="text-xl font-semibold">{project.title}</h3>
-                      <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{stripHtmlTags(project.description)}</p>
+                      <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{stripHtmlTags(project.descriptionLong ?? project.description ?? "")}</p>
                     </div>
                     <div className="flex flex-col sm:flex-row gap-2">
                       <Button variant="outline" onClick={() => handleEdit(project)} className="w-full sm:w-auto">

@@ -13,7 +13,8 @@ import { Button } from "@/components/ui/button";
 interface Project {
   $id: string;
   title: string;
-  description: string;
+  description?: string;
+  descriptionLong?: string;
   imageUrl: string;
   projectUrl: string;
   technologies: string[];
@@ -63,6 +64,8 @@ export default function ProjectDetailsContent() {
     return <div>Project not found</div>;
   }
 
+  const html = project.descriptionLong ?? project.description ?? "";
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       <div className="space-y-6">
@@ -84,7 +87,7 @@ export default function ProjectDetailsContent() {
         )}
 
         <div className="prose prose-lg dark:prose-invert max-w-none">
-          <div dangerouslySetInnerHTML={{ __html: project.description }} />
+          <div dangerouslySetInnerHTML={{ __html: html }} />
         </div>
 
         {project.projectUrl && (
