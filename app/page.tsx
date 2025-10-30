@@ -20,7 +20,8 @@ interface Project {
   $id: string;
   $createdAt: string;
   title: string;
-  description: string;
+  description?: string;
+  descriptionLong?: string;
   imageUrl: string;
   projectUrl: string;
   technologies: string[];
@@ -143,7 +144,7 @@ export default function HomePage() {
                         <CardTitle className="text-lg sm:text-xl">{project.title}</CardTitle>
                       </CardHeader>
                       <CardContent className="p-4 sm:p-6 flex-grow">
-                        <p className="text-sm sm:text-base text-muted-foreground line-clamp-2">{stripHtmlTags(project.description)}</p>
+                        <p className="text-sm sm:text-base text-muted-foreground line-clamp-2">{stripHtmlTags(project.descriptionLong ?? project.description ?? "")}</p>
                       </CardContent>
                     </Card>
                   </Link>
@@ -163,7 +164,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {loading
             ? Array.from({ length: 3 }).map((_, index) => (
-                <Card key={index} className="h-full flex flex-col">
+                <Card key={index} className="h-full flex flex col">
                   {index % 2 === 0 && <Skeleton className="w-full h-48" />}
                   <CardHeader className="p-4 sm:p-6">
                     <Skeleton className="h-6 w-3/4" />

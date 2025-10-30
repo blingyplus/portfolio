@@ -16,7 +16,8 @@ interface Project {
   $id: string;
   $createdAt: string;
   title: string;
-  description: string;
+  description?: string;
+  descriptionLong?: string;
   imageUrl: string;
   projectUrl: string;
   technologies: string[];
@@ -83,7 +84,7 @@ export default function ProjectsPage() {
                 <CardTitle className="group-hover:text-primary transition-colors">{project.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="line-clamp-3 text-muted-foreground">{stripHtmlTags(project.description)}</p>
+                <p className="line-clamp-3 text-muted-foreground">{stripHtmlTags(project.descriptionLong ?? project.description ?? "")}</p>
                 <div className="flex justify-between items-center mt-4">
                   <span className="text-sm text-muted-foreground">View Details</span>
                   <a href={project.projectUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline" onClick={(e) => e.stopPropagation()}>
