@@ -279,7 +279,22 @@ async function syncModels() {
         throw e;
       }
     }
+    // migrate images array from legacy imageUrl if needed
+    try {
+      const docs = await listDocuments("projects");
+      const documents = Array.isArray(docs.documents) ? docs.documents : [];
+      for (const doc of documents) {
+        const hasImages = Array.isArray(doc.images) && doc.images.length > 0;
+        const hasSingle = typeof doc.imageUrl === "string" && doc.imageUrl.length > 0;
+        if (!hasImages && hasSingle) {
+          await updateDocument("projects", doc.$id, { images: [doc.imageUrl] });
+        }
+      }
+    } catch (mErr) {
+      console.warn("Image array migration warning:", mErr?.message || mErr);
+    }
     await ensureStringAttribute("projects", "imageUrl", 255);
+    await ensureStringArrayAttribute("projects", "images", 255);
     await ensureStringAttribute("projects", "projectUrl", 255);
     await ensureStringArrayAttribute("projects", "technologies", 255);
     await ensureIntegerAttribute("projects", "order");

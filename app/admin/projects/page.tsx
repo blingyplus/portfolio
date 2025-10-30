@@ -15,10 +15,12 @@ import { stripHtmlTags } from "../../lib/utils";
 
 interface Project {
   $id: string;
+  $createdAt?: string;
   title: string;
   description?: string;
   descriptionLong?: string;
   imageUrl: string;
+  images?: string[];
   projectUrl: string;
   technologies: string[];
 }
@@ -38,10 +40,11 @@ export default function AdminProjects() {
     description: "",
     descriptionLong: "",
     imageUrl: "",
+    images: [],
     projectUrl: "",
     technologies: [],
   });
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageFiles, setImageFiles] = useState<File[] | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -52,7 +55,9 @@ export default function AdminProjects() {
   const fetchProjects = async () => {
     try {
       const data = await projectsCollection.getAll();
-      setProjects(data as unknown as Project[]);
+      const list = data as unknown as Project[];
+      const sorted = list.sort((a, b) => new Date(b.$createdAt || 0).getTime() - new Date(a.$createdAt || 0).getTime());
+      setProjects(sorted);
     } catch (error) {
       const appwriteError = error as AppwriteError;
       console.error("Error fetching projects:", appwriteError);
@@ -92,25 +97,28 @@ export default function AdminProjects() {
     }
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImageFile(e.target.files[0]);
+  const handleImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setImageFiles(Array.from(e.target.files));
+    } else {
+      setImageFiles(null);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editingProject) {
-      const { $id, title, descriptionLong, imageUrl, projectUrl, technologies } = editingProject;
+      const { $id, title, descriptionLong, imageUrl, images, projectUrl, technologies } = editingProject;
       const dataToUpdate: Record<string, unknown> = {
         title,
         descriptionLong: descriptionLong ?? "",
         imageUrl,
+        images: images ?? [],
         projectUrl,
         technologies,
       };
       try {
-        await projectsCollection.update($id, dataToUpdate, imageFile || undefined);
+        await projectsCollection.update($id, dataToUpdate, imageFiles || undefined);
         setEditingProject(null);
         toast({
           title: "Success",
@@ -131,14 +139,14 @@ export default function AdminProjects() {
           ...newProject,
           descriptionLong: newProject.descriptionLong ?? newProject.description ?? "",
         };
-        // Clean up legacy field on create
         delete (payload as any).description;
-        await projectsCollection.create(payload, imageFile || undefined);
+        await projectsCollection.create(payload, imageFiles || undefined);
         setNewProject({
           title: "",
           description: "",
           descriptionLong: "",
           imageUrl: "",
+          images: [],
           projectUrl: "",
           technologies: [],
         });
@@ -156,7 +164,7 @@ export default function AdminProjects() {
         });
       }
     }
-    setImageFile(null);
+    setImageFiles(null);
     fetchProjects();
   };
 
@@ -180,7 +188,6 @@ export default function AdminProjects() {
   };
 
   const handleEdit = (project: Project) => {
-    // Ensure editor shows the long description if present
     if (!project.descriptionLong && project.description) {
       project = { ...project, descriptionLong: project.description };
     }
@@ -222,7 +229,7 @@ export default function AdminProjects() {
               <Editor apiKey={TINYMCE_API_KEY} init={TINYMCE_CONFIG} value={editingProject ? (editingProject.descriptionLong ?? editingProject.description ?? "") : (newProject.descriptionLong ?? newProject.description ?? "")} onEditorChange={handleEditorChange} />
             </div>
             <div className="space-y-4">
-              <Input type="file" accept="image/*" onChange={handleImageChange} className="w-full" />
+              <Input type="file" accept="image/*" multiple onChange={handleImagesChange} className="w-full" />
               <Input name="projectUrl" placeholder="Project URL" value={editingProject ? editingProject.projectUrl : newProject.projectUrl} onChange={handleInputChange} className="w-full" />
               <Input
                 name="technologies"
@@ -252,11 +259,11 @@ export default function AdminProjects() {
           {projects.map((project) => (
             <Card key={project.$id} className="hover:shadow-lg transition-shadow">
               <CardContent className="p-0">
-                {project.imageUrl && (
+                {(project.images && project.images[0]) || project.imageUrl ? (
                   <div className="relative w-full h-48">
-                    <Image src={project.imageUrl} alt={project.title} fill className="object-cover rounded-t-lg" />
+                    <Image src={(project.images && project.images[0]) || project.imageUrl} alt={project.title} fill className="object-cover rounded-t-lg" />
                   </div>
-                )}
+                ) : null}
                 <div className="p-4">
                   <div className="space-y-3">
                     <div>

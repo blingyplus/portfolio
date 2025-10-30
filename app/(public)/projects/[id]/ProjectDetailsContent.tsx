@@ -11,6 +11,7 @@ import ImageViewer from "@/app/components/ImageViewer";
 import ErrorMessage from "@/app/components/error";
 import Loading from "@/app/components/loading";
 import { Button } from "@/components/ui/button";
+import { siteConfig } from "@/app/config/site";
 
 interface Project {
   $id: string;
@@ -72,6 +73,13 @@ export default function ProjectDetailsContent() {
     fetchProject();
   }, [id]);
 
+  // Ensure browser tab shows the project title even if SSR metadata could not fetch it
+  useEffect(() => {
+    if (project?.title) {
+      document.title = `${project.title} | ${siteConfig.personal.fullName}`;
+    }
+  }, [project?.title]);
+
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
 
@@ -87,10 +95,10 @@ export default function ProjectDetailsContent() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 overflow-x-hidden">
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl sm:text-4xl font-bold mb-4">{project.title}</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold mb-4 break-words">{project.title}</h1>
           <div className="flex flex-wrap gap-2 mb-6">
             {project.technologies.map((tech) => (
               <span key={tech} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
@@ -106,7 +114,7 @@ export default function ProjectDetailsContent() {
           </div>
         )}
 
-        <div className="prose prose-lg dark:prose-invert max-w-none">
+        <div className="prose prose-lg dark:prose-invert max-w-none break-words">
           <div dangerouslySetInnerHTML={{ __html: html }} />
         </div>
 
@@ -131,8 +139,8 @@ export default function ProjectDetailsContent() {
                     <AppwriteImage src={p.imageUrl} alt={p.title} className="w-full h-40 object-cover rounded-t-lg" />
                   )}
                   <div className="p-4">
-                    <h3 className="text-lg font-semibold group-hover:text-primary transition-colors">{p.title}</h3>
-                    <p className="text-sm text-muted-foreground line-clamp-3 mt-2">{stripHtmlTags(p.descriptionLong ?? p.description ?? "")}</p>
+                    <h3 className="text-lg font-semibold group-hover:text-primary transition-colors break-words">{p.title}</h3>
+                    <p className="text-sm text-muted-foreground line-clamp-3 mt-2 break-words">{stripHtmlTags(p.descriptionLong ?? p.description ?? "")}</p>
                   </div>
                 </div>
               </Link>

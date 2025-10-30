@@ -35,18 +35,36 @@ export async function uploadImage(file: File) {
   return storage.getFileView(bucketId, uploadedFile.$id);
 }
 
+export async function uploadImages(files: File[] | FileList): Promise<string[]> {
+  const arr = Array.from(files as any as File[]);
+  const urls: string[] = [];
+  for (const f of arr) {
+    const view = await uploadImage(f);
+    urls.push(view.href);
+  }
+  return urls;
+}
+
 export const projectsCollection = {
-  create: async (data: Record<string, unknown>, imageFile?: File) => {
-    if (imageFile) {
-      const imageUrl = await uploadImage(imageFile);
-      data.imageUrl = imageUrl.href;
+  create: async (data: Record<string, unknown>, imageFiles?: File | File[] | FileList) => {
+    if (imageFiles) {
+      const filesArray = Array.isArray(imageFiles) ? imageFiles : (imageFiles instanceof FileList ? Array.from(imageFiles) : [imageFiles]);
+      const urls = await uploadImages(filesArray);
+      data.images = urls;
+      // keep legacy imageUrl for backward compatibility
+      if (urls.length > 0) data.imageUrl = urls[0];
     }
     return createOrUpdateDocument("Projects", null, data);
   },
-  update: async (id: string, data: Record<string, unknown>, imageFile?: File) => {
-    if (imageFile) {
-      const imageUrl = await uploadImage(imageFile);
-      data.imageUrl = imageUrl.href;
+  update: async (id: string, data: Record<string, unknown>, imageFiles?: File | File[] | FileList) => {
+    if (imageFiles) {
+      const filesArray = Array.isArray(imageFiles) ? imageFiles : (imageFiles instanceof FileList ? Array.from(imageFiles) : [imageFiles]);
+      const urls = await uploadImages(filesArray);
+      // merge with any existing images array if provided
+      const existing = Array.isArray((data as any).images) ? ((data as any).images as string[]) : [];
+      const merged = existing.length ? [...existing, ...urls] : urls;
+      data.images = merged;
+      if (merged.length > 0) data.imageUrl = merged[0];
     }
     return createOrUpdateDocument("Projects", id, data);
   },

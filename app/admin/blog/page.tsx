@@ -52,7 +52,9 @@ export default function AdminBlogPosts() {
   const fetchPosts = async () => {
     try {
       const fetchedPosts = await blogPostsCollection.getAll();
-      setPosts(fetchedPosts as unknown as BlogPost[]);
+      const list = fetchedPosts as unknown as BlogPost[];
+      const sorted = list.sort((a, b) => new Date(b.$createdAt || 0).getTime() - new Date(a.$createdAt || 0).getTime());
+      setPosts(sorted);
     } catch (error) {
       const appwriteError = error as AppwriteError;
       console.error("Error fetching posts:", appwriteError);
