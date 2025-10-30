@@ -7,8 +7,10 @@ import { siteConfig } from "@/app/config/site";
 interface Project {
   $id: string;
   title: string;
-  description: string;
-  imageUrl: string;
+  description?: string;
+  descriptionLong?: string;
+  imageUrl?: string;
+  images?: string[];
   projectUrl: string;
   technologies: string[];
 }
@@ -25,7 +27,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
       };
     }
 
-    const strippedDescription = stripHtmlTags(project.description).substring(0, 160);
+    const descHtml = project.descriptionLong ?? project.description ?? "";
+    const strippedDescription = stripHtmlTags(descHtml).substring(0, 160);
 
     return {
       title: project.title,
