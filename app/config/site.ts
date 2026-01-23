@@ -51,7 +51,7 @@ export const siteConfig = {
     defaultTitle: "Full Stack Developer Portfolio",
     defaultDescription: "Full Stack Developer specializing in modern web technologies. Explore my projects, blog posts, and professional journey.",
     defaultKeywords: ["Full Stack Developer", "Web Developer", "Software Engineer", "Portfolio", "Projects", "Blog"],
-    tagline: "Full-Stack Developer turning coffee and curiosity into working code. I build things that matter.", // Homepage tagline
+    tagline: "Full-Stack Software Engineer.", // Homepage tagline
   },
 
   // Footer
