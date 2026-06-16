@@ -102,8 +102,8 @@ export default function HomePage() {
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button asChild className="w-full sm:w-auto">
-                  <a href={siteConfig.urls.upwork} target="_blank" rel="noopener noreferrer">
-                    Hire Me on Upwork
+                  <a href={siteConfig.urls.meeting} target="_blank" rel="noopener noreferrer">
+                    Schedule a Meeting
                   </a>
                 </Button>
                 <Button asChild variant="outline" className="w-full sm:w-auto">

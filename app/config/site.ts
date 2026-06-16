@@ -31,7 +31,7 @@ export const siteConfig = {
     github: "https://github.com/blingyplus",
     githubRepo: "https://github.com/blingyplus/portfolio", // Portfolio source code
     linkedin: "https://www.linkedin.com/in/russel-dankwa-boakye-904252255/",
-    upwork: process.env.NEXT_PUBLIC_UPWORK_URL || "https://www.upwork.com/freelancers/~01304d3a781037ba57?mp_source=share",
+    meeting: process.env.NEXT_PUBLIC_MEETING_URL || "",
   },
 
   // Social Media
