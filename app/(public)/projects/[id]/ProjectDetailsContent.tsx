@@ -12,27 +12,28 @@ import ErrorMessage from "@/app/components/error";
 import Loading from "@/app/components/loading";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/app/config/site";
+import { stripHtmlTags } from "@/app/lib/utils";
+import type { Project } from "@/app/lib/content";
 
-interface Project {
-  $id: string;
-  title: string;
-  description?: string;
-  descriptionLong?: string;
-  imageUrl: string;
-  projectUrl: string;
-  technologies: string[];
+interface ProjectDetailsContentProps {
+  // Provided by the server-rendered page; absent when the server could not load data.
+  initialProject?: Project;
+  initialOtherProjects?: Project[];
 }
 
-export default function ProjectDetailsContent() {
+export default function ProjectDetailsContent({ initialProject, initialOtherProjects }: ProjectDetailsContentProps = {}) {
   const { id } = useParams();
-  const [project, setProject] = useState<Project | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [otherProjects, setOtherProjects] = useState<Project[]>([]);
+  const [project, setProject] = useState<Project | null>(initialProject ?? null);
+  const [loading, setLoading] = useState(!initialProject);
+  const [otherProjects, setOtherProjects] = useState<Project[]>(initialOtherProjects ?? []);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Scroll to top when page loads
     window.scrollTo(0, 0);
+
+    // Server already supplied the project; only fetch in the browser as a fallback.
+    if (initialProject) return;
 
     const fetchProject = async () => {
       if (!id) {
@@ -71,7 +72,7 @@ export default function ProjectDetailsContent() {
     };
 
     fetchProject();
-  }, [id]);
+  }, [id, initialProject]);
 
   // Ensure browser tab shows the project title even if SSR metadata could not fetch it
   useEffect(() => {
@@ -88,11 +89,6 @@ export default function ProjectDetailsContent() {
   }
 
   const html = project.descriptionLong ?? project.description ?? "";
-  const stripHtmlTags = (raw: string) => {
-    const el = document.createElement("div");
-    el.innerHTML = raw;
-    return el.innerText || el.textContent || "";
-  };
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 overflow-x-hidden">

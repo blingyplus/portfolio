@@ -29,6 +29,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 
 export const metadata = {
+  // Lets relative URLs in page metadata (canonical links, preview images) resolve to the live site.
+  metadataBase: new URL(siteConfig.urls.site),
   title: getFullTitle(),
   description: getDescription(),
   keywords: [siteConfig.personal.fullName, siteConfig.personal.nickname, ...siteConfig.metadata.defaultKeywords],
@@ -41,6 +43,7 @@ export const metadata = {
     title: getFullTitle(),
     description: getDescription(),
     siteName: siteConfig.brand.siteName,
+    images: [{ url: siteConfig.images.profile, alt: siteConfig.personal.fullName }],
   },
   twitter: {
     card: "summary_large_image",

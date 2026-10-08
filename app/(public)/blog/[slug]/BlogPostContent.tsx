@@ -10,22 +10,19 @@ import ErrorMessage from "@/app/components/error";
 import AppwriteImage from "@/app/components/AppwriteImage";
 import ShareButtons from "@/app/components/ShareButtons";
 import { formatDate, stripHtmlTags } from "@/app/lib/utils";
+import type { BlogPost } from "@/app/lib/content";
 
-interface BlogPost {
-  $id: string;
-  $createdAt: string;
-  title: string;
-  content: string;
+interface BlogPostContentProps {
   slug: string;
-  publishDate: string;
-  tags: string[];
-  imageUrl?: string;
+  // Provided by the server-rendered page; absent when the server could not load data.
+  initialPost?: BlogPost;
+  initialRelatedPosts?: BlogPost[];
 }
 
-export default function BlogPostContent({ slug }: { slug: string }) {
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function BlogPostContent({ slug, initialPost, initialRelatedPosts }: BlogPostContentProps) {
+  const [post, setPost] = useState<BlogPost | null>(initialPost ?? null);
+  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>(initialRelatedPosts ?? []);
+  const [loading, setLoading] = useState(!initialPost);
   const [error, setError] = useState<string | null>(null);
   const [shareUrl, setShareUrl] = useState<string>("");
 
@@ -39,6 +36,9 @@ export default function BlogPostContent({ slug }: { slug: string }) {
   useEffect(() => {
     // Scroll to top when page loads
     window.scrollTo(0, 0);
+
+    // Server already supplied the post; only fetch in the browser as a fallback.
+    if (initialPost) return;
 
     const fetchPost = async () => {
       try {
@@ -61,17 +61,11 @@ export default function BlogPostContent({ slug }: { slug: string }) {
       }
     };
     fetchPost();
-  }, [slug]);
+  }, [slug, initialPost]);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
   if (!post) return <ErrorMessage message="Blog post not found." />;
-
-  const stripHtmlTagsLocal = (html: string): string => {
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = html;
-    return tempDiv.innerText || tempDiv.textContent || "";
-  };
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -80,7 +74,9 @@ export default function BlogPostContent({ slug }: { slug: string }) {
         <div className="space-y-6">
           <h1 className="text-3xl font-bold">{post.title}</h1>
           <div className="flex flex-wrap items-center gap-4">
-            <span className="text-sm text-muted-foreground">{formatDate(post.$createdAt)}</span>
+            <span className="text-sm text-muted-foreground" suppressHydrationWarning>
+              {formatDate(post.$createdAt)}
+            </span>
             <div className="flex flex-wrap gap-2">
               {post.tags.map((tag, index) => (
                 <Badge key={index} variant="secondary">
@@ -91,7 +87,7 @@ export default function BlogPostContent({ slug }: { slug: string }) {
           </div>
           <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: post.content }} />
         </div>
-        {shareUrl && <ShareButtons title={post.title} url={shareUrl} description={stripHtmlTagsLocal(post.content).substring(0, 160)} />}
+        {shareUrl && <ShareButtons title={post.title} url={shareUrl} description={stripHtmlTags(post.content).substring(0, 160)} />}
       </article>
 
       <section className="mt-12">
@@ -104,7 +100,7 @@ export default function BlogPostContent({ slug }: { slug: string }) {
                   <CardTitle className="line-clamp-2">{relatedPost.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="line-clamp-3 text-muted-foreground">{stripHtmlTagsLocal(relatedPost.content.substring(0, 100))}...</p>
+                  <p className="line-clamp-3 text-muted-foreground">{stripHtmlTags(relatedPost.content).substring(0, 100)}...</p>
                 </CardContent>
               </Link>
             </Card>

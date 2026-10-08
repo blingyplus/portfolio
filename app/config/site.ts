@@ -11,7 +11,7 @@
 export const siteConfig = {
   // Personal Information
   personal: {
-    fullName: "Russel Boakye Dankwa",
+    fullName: "Russel Dankwa Boakye",
     displayName: "Russel Dankwa Boakye", // Name as displayed on homepage
     nickname: "Russel Bling", // Alternative name/nickname
     email: "russelboakye@gmail.com",
@@ -22,16 +22,17 @@ export const siteConfig = {
   // Branding
   brand: {
     name: "blingyplus", // Brand name (used in navbar, footer, etc.)
-    siteName: "Russel Boakye Dankwa Portfolio", // Full site name for SEO
+    siteName: "Russel Dankwa Boakye Portfolio", // Full site name for SEO
   },
 
   // URLs
   urls: {
-    site: "https://blingyplus.com", // Your portfolio site URL
+    site: "https://www.blingyplus.xyz", // Your portfolio site URL
     github: "https://github.com/blingyplus",
     githubRepo: "https://github.com/blingyplus/portfolio", // Portfolio source code
     linkedin: "https://www.linkedin.com/in/russel-dankwa-boakye-904252255/",
     meeting: process.env.NEXT_PUBLIC_MEETING_URL || "",
+    resume: "/Russel_Dankwa_Boakye_Resume.pdf", // Resume PDF in /public
   },
 
   // Social Media
@@ -57,7 +58,7 @@ export const siteConfig = {
   // Footer
   footer: {
     builtByText: "Built by", // Text before your name in footer
-    footerPersonName: "Russel Boakye", // Name to display in footer (usually first + last name)
+    footerPersonName: "Russel Dankwa Boakye", // Name to display in footer (usually first + last name)
     sourceCodeText: "The source code is available on", // Text before GitHub link
   },
 };

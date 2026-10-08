@@ -16,6 +16,19 @@ export const formatDate = (date: string | Date): string => {
   });
 };
 
+// Server-safe: works without the DOM, so it can run during server rendering.
 export function stripHtmlTags(html: string): string {
-  return html.replace(/<[^>]*>/g, "");
+  return (html || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&rsquo;|&lsquo;/g, "'")
+    .replace(/&ldquo;|&rdquo;/g, '"')
+    .replace(/&mdash;/g, "\u2014")
+    .replace(/&ndash;/g, "\u2013")
+    .replace(/\s+/g, " ")
+    .trim();
 }
